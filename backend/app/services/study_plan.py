@@ -94,28 +94,9 @@ def generate_study_plan(
         response_text = response.text
 
     except Exception as e:
-        try:
-            import google.generativeai as legacy_genai
-
-            legacy_genai.configure(
-                api_key=api_key
-            )
-
-            model = legacy_genai.GenerativeModel(
-                "gemini-1.5-flash"
-            )
-
-            res = model.generate_content(
-                user_prompt
-            )
-
-            response_text = res.text
-
-        except Exception as inner_err:
-            raise ValueError(
-                f"Gemini API call failed: "
-                f"{str(e)} | {str(inner_err)}"
-            )
+        raise ValueError(
+            f"Gemini API call failed: {str(e)}"
+        )
 
     cleaned_json = _clean_ai_json(response_text)
 
@@ -126,7 +107,7 @@ def generate_study_plan(
             data_dict
         )
 
-        # Enforce deterministic study-time rules.
+        # Enforce deterministic study-plan rules.
         validated_plan = _enforce_task_durations(
             validated_plan
         )
@@ -278,39 +259,59 @@ def _mock_study_plan(
 
 
 # ============================================================
-# STUDY-TIME ENFORCEMENT
+# STUDY-PLAN ENFORCEMENT
 # ============================================================
 
 def _enforce_task_durations(
     plan: StudyPlanAIResponse
 ) -> StudyPlanAIResponse:
     """
-    Enforce SkillForge study-time rules.
+    Enforce SkillForge study-plan rules.
 
-    Normal tasks = 60 minutes.
-    Explicit maintenance tasks = 45 minutes.
+    Rules:
+    - Maximum 5 tasks per week.
+    - Normal tasks = 60 minutes.
+    - Explicit maintenance tasks = 45 minutes.
     """
+
+    tasks_by_week: Dict[int, List[StudyTask]] = {}
+
+    # Group tasks by week while preserving AI-generated order.
+    for task in plan.tasks:
+
+        week = task.week_number
+
+        if week not in tasks_by_week:
+            tasks_by_week[week] = []
+
+        # Keep a maximum of 5 tasks for each week.
+        if len(tasks_by_week[week]) < 5:
+            tasks_by_week[week].append(task)
 
     normalized_tasks = []
 
-    for task in plan.tasks:
-        task_text = task.task.lower()
+    # Rebuild tasks in chronological week order.
+    for week in sorted(tasks_by_week):
 
-        if (
-            "maintain" in task_text
-            or "maintenance" in task_text
-        ):
-            minutes = 45
-        else:
-            minutes = 60
+        for task in tasks_by_week[week]:
 
-        normalized_tasks.append(
-            task.model_copy(
-                update={
-                    "estimated_minutes": minutes
-                }
+            task_text = task.task.lower()
+
+            if (
+                "maintain" in task_text
+                or "maintenance" in task_text
+            ):
+                minutes = 45
+            else:
+                minutes = 60
+
+            normalized_tasks.append(
+                task.model_copy(
+                    update={
+                        "estimated_minutes": minutes
+                    }
+                )
             )
-        )
 
     return plan.model_copy(
         update={
@@ -344,17 +345,18 @@ def _system_instruction() -> str:
         "6. Generate a study plan for exactly 4 weeks. "
         "Do not generate fewer or more than 4 weeks.\n"
 
-        "7. Standard study tasks are 60 minutes. "
+        "7. Generate exactly 5 tasks per week, for exactly 20 tasks total.\n"
+
+        "8. Standard study tasks are 60 minutes. "
         "Only explicit maintenance/revision tasks may be 45 minutes.\n"
 
-        "8. Target approximately 60-90 minutes per study day "
-        "and 5-7 meaningful tasks per week.\n"
+        "9. Target approximately 60-90 minutes per study day.\n"
 
-        "9. Do not generate hundreds of tasks.\n"
+        "10. Do not generate hundreds of tasks.\n"
 
-        "10. Do not require paid resources.\n"
+        "11. Do not require paid resources.\n"
 
-        "11. Return ONLY valid JSON matching the requested schema. "
+        "12. Return ONLY valid JSON matching the requested schema. "
         "No Markdown formatting surrounding the JSON."
     )
 
@@ -486,7 +488,7 @@ def generate_adaptive_study_plan(
 
         "7. Generate exactly 4 weeks.\n"
 
-        "8. Generate 5-7 meaningful tasks per week.\n"
+        "8. Generate exactly 5 tasks per week, for exactly 20 tasks total.\n"
 
         "9. Standard study tasks are 60 minutes. "
         "Only explicit maintenance/revision tasks may be 45 minutes.\n"
@@ -551,29 +553,9 @@ def generate_adaptive_study_plan(
 
     except Exception as e:
 
-        try:
-            import google.generativeai as legacy_genai
-
-            legacy_genai.configure(
-                api_key=api_key
-            )
-
-            model = legacy_genai.GenerativeModel(
-                "gemini-1.5-flash"
-            )
-
-            res = model.generate_content(
-                user_prompt
-            )
-
-            response_text = res.text
-
-        except Exception as inner_err:
-
-            raise ValueError(
-                f"Gemini API call failed: "
-                f"{str(e)} | {str(inner_err)}"
-            )
+        raise ValueError(
+            f"Gemini API call failed: {str(e)}"
+        )
 
     cleaned_json = _clean_ai_json(
         response_text
@@ -588,7 +570,7 @@ def generate_adaptive_study_plan(
             data_dict
         )
 
-        # Enforce deterministic study-time rules.
+        # Enforce deterministic study-plan rules.
         validated_plan = _enforce_task_durations(
             validated_plan
         )
@@ -724,7 +706,7 @@ def _mock_adaptive_study_plan(
     }
 
     # --------------------------------------------------------
-    # Generate 5 tasks per week.
+    # Generate exactly 5 tasks per week.
     # --------------------------------------------------------
 
     for week in range(1, 5):
