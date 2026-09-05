@@ -321,3 +321,200 @@ def generate_ai_analysis(
     db.refresh(new_ai_analysis)
 
     return new_ai_analysis
+
+# ============================================================
+# PHASE 4 - ADAPTIVE PRACTICE
+# ============================================================
+
+@router.get(
+    "/adaptive-practice",
+    summary="Get adaptive practice questions based on latest performance"
+)
+def get_adaptive_practice(
+    skill: str | None = None,
+    limit: int = 5,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Selects practice questions using the student's real latest
+    assessment performance.
+
+    Adaptation:
+    - Critical / very weak skill -> Beginner questions
+    - Needs Improvement -> Beginner + Intermediate
+    - Good -> Intermediate
+    - Strong -> Intermediate
+    - If previous answers exist, difficulty adapts from accuracy.
+    """
+
+    if limit < 1 or limit > 20:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Limit must be between 1 and 20."
+        )
+
+    # Latest completed assessment
+    latest_assessment = (
+        db.query(Assessment)
+        .filter(
+            Assessment.user_id == current_user.id,
+            Assessment.completed_at.isnot(None)
+        )
+        .order_by(Assessment.completed_at.desc())
+        .first()
+    )
+
+    if latest_assessment is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Complete an assessment before starting adaptive practice."
+        )
+
+    # Latest skill scores
+    skill_scores = (
+        db.query(SkillScore)
+        .filter(SkillScore.assessment_id == latest_assessment.id)
+        .all()
+    )
+
+    if not skill_scores:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No skill performance data is available."
+        )
+
+    score_map = {
+        item.skill: float(item.score)
+        for item in skill_scores
+    }
+
+    # If no skill was supplied, choose the weakest skill automatically.
+    if skill:
+        if skill not in score_map:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"No assessment performance found for skill: {skill}"
+            )
+        target_skill = skill
+    else:
+        target_skill = min(
+            score_map,
+            key=score_map.get
+        )
+
+    current_score = score_map[target_skill]
+
+    # Determine adaptive difficulty from actual performance.
+    if current_score < 50:
+        recommended_difficulty = "Beginner"
+    elif current_score < 70:
+        recommended_difficulty = "Intermediate"
+    else:
+        recommended_difficulty = "Intermediate"
+
+    # Check recent practice/assessment answers for this skill.
+    recent_answers = (
+        db.query(Answer)
+        .join(Question, Answer.question_id == Question.id)
+        .join(Assessment, Answer.assessment_id == Assessment.id)
+        .filter(
+            Assessment.user_id == current_user.id,
+            Question.skill == target_skill
+        )
+        .order_by(Assessment.completed_at.desc())
+        .limit(20)
+        .all()
+    )
+
+    if recent_answers:
+        recent_correct = sum(
+            1 for answer in recent_answers
+            if answer.is_correct
+        )
+
+        recent_accuracy = (
+            recent_correct / len(recent_answers) * 100
+        )
+
+        # If the student is performing well, increase difficulty.
+        if recent_accuracy >= 80:
+            recommended_difficulty = "Intermediate"
+
+        # If performance is very weak, reinforce fundamentals.
+        elif recent_accuracy < 50:
+            recommended_difficulty = "Beginner"
+
+    # Candidate questions.
+    query = db.query(Question).filter(
+        Question.skill == target_skill,
+        Question.difficulty == recommended_difficulty
+    )
+
+    candidates = query.order_by(Question.id.asc()).all()
+
+    # Fallback if the exact adaptive difficulty is unavailable.
+    if not candidates:
+        candidates = (
+            db.query(Question)
+            .filter(Question.skill == target_skill)
+            .order_by(Question.id.asc())
+            .all()
+        )
+
+    if not candidates:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"No practice questions available for {target_skill}."
+        )
+
+    # Avoid immediately repeating questions from the latest assessment.
+    latest_question_ids = {
+        answer.question_id
+        for answer in (
+            db.query(Answer)
+            .filter(
+                Answer.assessment_id == latest_assessment.id
+            )
+            .all()
+        )
+    }
+
+    unseen_candidates = [
+        question
+        for question in candidates
+        if question.id not in latest_question_ids
+    ]
+
+    if unseen_candidates:
+        candidates = unseen_candidates
+
+    selected = candidates[:limit]
+
+    return {
+        "assessment_id": latest_assessment.id,
+        "skill": target_skill,
+        "current_score": current_score,
+        "recommended_difficulty": recommended_difficulty,
+        "recent_accuracy": round(
+            recent_accuracy, 2
+        ) if recent_answers else None,
+        "reason": (
+            f"{target_skill} is currently at {current_score:.2f}%. "
+            f"Adaptive practice selected {recommended_difficulty} questions "
+            f"to target this skill."
+        ),
+        "questions": [
+            {
+                "id": question.id,
+                "skill": question.skill,
+                "question_text": question.question_text,
+                "option_a": question.option_a,
+                "option_b": question.option_b,
+                "option_c": question.option_c,
+                "option_d": question.option_d,
+                "difficulty": question.difficulty
+            }
+            for question in selected
+        ]
+    }

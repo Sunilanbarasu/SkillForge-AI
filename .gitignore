@@ -20,3 +20,10 @@ Thumbs.db
 
 # Local database logs
 *.log
+
+# Development backups
+*.backup
+*.before-*
+*.phase*-backup
+*-backup/
+frontend/src-backup-ui-*/

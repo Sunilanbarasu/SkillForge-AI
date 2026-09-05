@@ -1,4 +1,4 @@
-import json
+﻿import json
 import re
 from typing import Dict, Any, List
 
@@ -163,13 +163,7 @@ def generate_skill_gap_analysis(
 
         return AIAnalysisResultSchema(
             summary=summary_text,
-            strengths=strengths
-            or [
-                StrengthItem(
-                    skill="Overall Aptitude",
-                    reason="Completed diagnostic assessment.",
-                )
-            ],
+            strengths=strengths,
             weaknesses=weaknesses
             or [
                 WeaknessItem(
@@ -308,3 +302,4 @@ def generate_skill_gap_analysis(
             "Failed to parse and validate AI response JSON: "
             f"{str(parse_err)}"
         )
+

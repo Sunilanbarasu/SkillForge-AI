@@ -103,6 +103,10 @@ def generate_study_plan(
     try:
         data_dict = json.loads(cleaned_json)
 
+        data_dict = _normalize_gemini_study_plan(
+            data_dict
+        )
+
         validated_plan = StudyPlanAIResponse.model_validate(
             data_dict
         )
@@ -566,6 +570,10 @@ def generate_adaptive_study_plan(
             cleaned_json
         )
 
+        data_dict = _normalize_gemini_study_plan(
+            data_dict
+        )
+
         validated_plan = StudyPlanAIResponse.model_validate(
             data_dict
         )
@@ -823,6 +831,198 @@ def _mock_adaptive_study_plan(
 
 
 # ============================================================
+# GEMINI RESPONSE NORMALIZATION
+# ============================================================
+
+def _normalize_gemini_study_plan(data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Normalize common Gemini field names into the existing
+    SkillForge StudyPlanAIResponse schema.
+
+    SkillForge requires:
+    - skill
+    - week_number
+    - task
+    - difficulty
+    - estimated_minutes
+
+    Gemini may return equivalent names such as:
+    - week / week_number
+    - task_description / description / activity / task
+    - duration_minutes / duration / estimated_minutes
+    """
+
+    if not isinstance(data, dict):
+        raise ValueError(
+            "Gemini study-plan response must be a JSON object."
+        )
+
+    tasks = data.get("tasks")
+
+    if not isinstance(tasks, list):
+        raise ValueError(
+            "Gemini study-plan response must contain a tasks list."
+        )
+
+    normalized_tasks = []
+
+    for index, task in enumerate(tasks):
+
+        if not isinstance(task, dict):
+            raise ValueError(
+                f"Gemini study-plan task {index + 1} must be an object."
+            )
+
+        normalized_task = dict(task)
+
+        # ----------------------------------------------------
+        # SKILL
+        # ----------------------------------------------------
+
+        skill = normalized_task.get("skill")
+
+        if not skill:
+            skill = normalized_task.get("topic")
+
+        if not skill:
+            raise ValueError(
+                f"Gemini study-plan task {index + 1} "
+                "is missing skill."
+            )
+
+        normalized_task["skill"] = str(skill).strip()
+
+        # ----------------------------------------------------
+        # WEEK NUMBER
+        # ----------------------------------------------------
+
+        week_number = normalized_task.get("week_number")
+
+        if week_number is None:
+            week_number = normalized_task.get("week")
+
+        if week_number is None:
+            raise ValueError(
+                f"Gemini study-plan task {index + 1} "
+                "is missing week/week_number."
+            )
+
+        try:
+            week_number = int(week_number)
+        except (TypeError, ValueError):
+            raise ValueError(
+                f"Gemini study-plan task {index + 1} "
+                "has an invalid week number."
+            )
+
+        normalized_task["week_number"] = week_number
+
+        # ----------------------------------------------------
+        # TASK TEXT
+        # ----------------------------------------------------
+
+        task_text = normalized_task.get("task")
+
+        if not task_text:
+            task_text = normalized_task.get("task_description")
+
+        if not task_text:
+            task_text = normalized_task.get("description")
+
+        if not task_text:
+            task_text = normalized_task.get("activity")
+
+        if not task_text:
+            raise ValueError(
+                f"Gemini study-plan task {index + 1} "
+                "is missing task/task_description."
+            )
+
+        normalized_task["task"] = str(task_text).strip()
+
+        # ----------------------------------------------------
+        # ESTIMATED MINUTES
+        # ----------------------------------------------------
+
+        estimated_minutes = normalized_task.get(
+            "estimated_minutes"
+        )
+
+        if estimated_minutes is None:
+            estimated_minutes = normalized_task.get(
+                "duration_minutes"
+            )
+
+        if estimated_minutes is None:
+            estimated_minutes = normalized_task.get(
+                "duration"
+            )
+
+        if estimated_minutes is None:
+            estimated_minutes = 60
+
+        try:
+            estimated_minutes = int(estimated_minutes)
+        except (TypeError, ValueError):
+            estimated_minutes = 60
+
+        normalized_task["estimated_minutes"] = estimated_minutes
+
+        # ----------------------------------------------------
+        # DIFFICULTY
+        # ----------------------------------------------------
+
+        difficulty = normalized_task.get("difficulty")
+
+        if not difficulty:
+            if week_number == 1:
+                difficulty = "Beginner"
+            elif week_number in (2, 3):
+                difficulty = "Intermediate"
+            else:
+                difficulty = "Advanced"
+
+        difficulty_map = {
+            "beginner": "Beginner",
+            "basic": "Beginner",
+            "easy": "Beginner",
+            "intermediate": "Intermediate",
+            "medium": "Intermediate",
+            "moderate": "Intermediate",
+            "advanced": "Advanced",
+            "hard": "Advanced",
+            "expert": "Advanced",
+        }
+
+        difficulty = difficulty_map.get(
+            str(difficulty).strip().lower(),
+            str(difficulty).strip()
+        )
+
+        normalized_task["difficulty"] = difficulty
+
+        # ----------------------------------------------------
+        # REMOVE GEMINI-ONLY ALIASES
+        # ----------------------------------------------------
+
+        normalized_task.pop("week", None)
+        normalized_task.pop("day", None)
+        normalized_task.pop("topic", None)
+        normalized_task.pop("task_description", None)
+        normalized_task.pop("description", None)
+        normalized_task.pop("activity", None)
+        normalized_task.pop("duration_minutes", None)
+        normalized_task.pop("duration", None)
+
+        normalized_tasks.append(normalized_task)
+
+    normalized_data = dict(data)
+    normalized_data["tasks"] = normalized_tasks
+
+    return normalized_data
+
+
+# ============================================================
 # SHARED AI RESPONSE CLEANUP
 # ============================================================
 
@@ -847,3 +1047,283 @@ def _clean_ai_json(
     )
 
     return cleaned_json.strip()
+
+# ============================================================
+# PHASE 2 - PHASE-1-AWARE PERSONALIZED STUDY PLAN
+# ============================================================
+
+def build_phase1_personalized_plan_payload(
+    target_role: str,
+    experience_level: str,
+    assessment_id: int,
+    overall_score: float,
+    adaptive_analysis: Dict[str, Any],
+) -> Dict[str, Any]:
+    """
+    Build a personalized study-plan payload directly from
+    the deterministic Phase 1 adaptive analysis.
+    """
+
+    return {
+        "target_role": target_role or "Software Developer",
+        "experience_level": experience_level or "Student",
+        "assessment": {
+            "assessment_id": assessment_id,
+            "overall_score": overall_score,
+        },
+        "adaptive_analysis": {
+            "strong_skills": adaptive_analysis.get("strong_skills", []),
+            "good_skills": adaptive_analysis.get("good_skills", []),
+            "weak_skills": adaptive_analysis.get("weak_skills", []),
+            "critical_skills": adaptive_analysis.get("critical_skills", []),
+            "improving_skills": adaptive_analysis.get("improving_skills", []),
+            "declining_skills": adaptive_analysis.get("declining_skills", []),
+            "priority_skills": adaptive_analysis.get("priority_skills", []),
+            "skills": adaptive_analysis.get("skills", []),
+        },
+    }
+
+
+def generate_phase1_personalized_study_plan(
+    payload: Dict[str, Any]
+) -> StudyPlanAIResponse:
+    """
+    Generate a personalized 4-week study plan directly from
+    Phase 1 adaptive analysis.
+    """
+
+    api_key = settings.GEMINI_API_KEY.strip()
+
+    if api_key in (
+        "mock_test_key",
+        "MOCK_TEST_KEY",
+        "TEST_MODE"
+    ):
+        return _mock_phase1_personalized_study_plan(payload)
+
+    if not api_key:
+        raise ValueError(
+            "GEMINI_API_KEY is not configured in backend "
+            "environment variables (.env)."
+        )
+
+    system_instruction = (
+        "You are SkillForge AI, an adaptive placement preparation planner.\n"
+        "Create a personalized 4-week placement preparation plan "
+        "using ONLY the supplied Phase 1 adaptive analysis.\n\n"
+
+        "RULES:\n"
+        "1. Backend assessment scores and skill accuracies are authoritative.\n"
+        "2. Never invent or change numerical scores.\n"
+        "3. Critical skills receive the strongest learning focus.\n"
+        "4. Weak skills receive strong targeted practice.\n"
+        "5. Strong and Good skills receive maintenance where appropriate.\n"
+        "6. Use supplied priority_skills as the primary focus.\n"
+        "7. Every task must name a real skill from the supplied data.\n"
+        "8. Tasks must be specific and actionable for placement preparation.\n"
+        "9. Generate exactly 4 weeks.\n"
+        "10. Generate exactly 5 tasks per week.\n"
+        "11. Generate exactly 20 tasks total.\n"
+        "12. Standard tasks are 60 minutes.\n"
+        "13. Only explicit maintenance tasks may be 45 minutes.\n"
+        "14. Do not require paid resources.\n"
+        "15. Return ONLY valid JSON.\n"
+    )
+
+    user_prompt = (
+        f"{system_instruction}\n\n"
+        "PHASE 1 ADAPTIVE ANALYSIS:\n"
+        f"{json.dumps(payload, indent=2)}\n\n"
+
+        "ADAPTIVE BEHAVIOR:\n"
+        "Prioritize the supplied priority_skills.\n"
+        "Give the most attention to Critical skills.\n"
+        "Then address Weak and Needs Improvement skills.\n"
+        "Use maintenance for strong skills when appropriate.\n"
+        "Do not claim improvement unless the supplied data says so.\n\n"
+
+        "Return JSON matching this structure:\n"
+        "{\n"
+        '  "title": "Personalized Software Developer Placement Plan",\n'
+        '  "goal": "Improve the highest-priority skills identified by the adaptive assessment.",\n'
+        '  "duration_weeks": 4,\n'
+        '  "tasks": []\n'
+        "}"
+    )
+
+    try:
+        from google import genai
+
+        client = genai.Client(api_key=api_key)
+
+        response = client.models.generate_content(
+            model="gemini-3.5-flash-lite",
+            contents=user_prompt,
+        )
+
+        response_text = response.text
+
+    except Exception as e:
+        raise ValueError(
+            f"Gemini API call failed: {str(e)}"
+        )
+
+    cleaned_json = _clean_ai_json(response_text)
+
+    try:
+        data_dict = json.loads(cleaned_json)
+
+        data_dict = _normalize_gemini_study_plan(
+            data_dict
+        )
+
+        validated_plan = StudyPlanAIResponse.model_validate(
+            data_dict
+        )
+
+        return _enforce_task_durations(validated_plan)
+
+    except Exception as parse_err:
+        raise ValueError(
+            "Failed to parse and validate personalized AI response JSON: "
+            f"{str(parse_err)}"
+        )
+
+
+def _mock_phase1_personalized_study_plan(
+    payload: Dict[str, Any]
+) -> StudyPlanAIResponse:
+    """
+    Deterministic test-mode generator using actual Phase 1 priorities.
+    """
+
+    adaptive = payload.get(
+        "adaptive_analysis",
+        {}
+    )
+
+    skills_data = adaptive.get(
+        "skills",
+        []
+    )
+
+    priority_skills = adaptive.get(
+        "priority_skills",
+        []
+    )
+
+    critical_skills = adaptive.get(
+        "critical_skills",
+        []
+    )
+
+    weak_skills = adaptive.get(
+        "weak_skills",
+        []
+    )
+
+    # Build skill order from actual Phase 1 data.
+    skill_order = list(
+        dict.fromkeys(
+            critical_skills
+            + priority_skills
+            + weak_skills
+        )
+    )
+
+    # Only use skills that actually exist in Phase 1 results.
+    actual_skills = {
+        item.get("skill")
+        for item in skills_data
+        if item.get("skill")
+    }
+
+    skill_order = [
+        skill
+        for skill in skill_order
+        if skill in actual_skills
+    ]
+
+    if not skill_order:
+        skill_order = [
+            item.get("skill")
+            for item in skills_data
+            if item.get("skill")
+        ]
+
+    if not skill_order:
+        skill_order = ["DSA"]
+
+    templates = {
+        1: [
+            "Review the core fundamentals of {skill} and identify weak concepts.",
+            "Solve 3 beginner {skill} placement problems and review every mistake.",
+            "Practice basic {skill} concepts using active recall and short exercises.",
+            "Revise common {skill} placement patterns and solve 3 targeted questions.",
+            "Complete a focused {skill} practice set and analyze incorrect answers.",
+        ],
+        2: [
+            "Solve 3 intermediate {skill} placement problems.",
+            "Practice {skill} application questions under a time limit.",
+            "Complete a mixed {skill} problem set and review mistakes.",
+            "Explain the approach for 3 {skill} problems before checking solutions.",
+            "Complete an intermediate {skill} practice test and record weak topics.",
+        ],
+        3: [
+            "Solve mixed-difficulty {skill} placement problems.",
+            "Complete 3 timed {skill} problems using interview-style constraints.",
+            "Retry difficult {skill} questions without looking at the answers.",
+            "Complete a mini {skill} assessment covering multiple concepts.",
+            "Identify remaining {skill} gaps and complete targeted practice.",
+        ],
+        4: [
+            "Take a timed placement-style {skill} practice set.",
+            "Solve advanced {skill} interview problems.",
+            "Complete a mock placement test focused on {skill}.",
+            "Review high-value {skill} concepts and remaining weak areas.",
+            "Complete a final {skill} challenge and record remaining improvement areas.",
+        ],
+    }
+
+    tasks = []
+
+    for week in range(1, 5):
+        for index in range(5):
+
+            skill = skill_order[
+                (index + week - 1) % len(skill_order)
+            ]
+
+            difficulty = (
+                "Beginner"
+                if week == 1
+                else "Intermediate"
+                if week in (2, 3)
+                else "Advanced"
+            )
+
+            tasks.append(
+                StudyTask(
+                    skill=skill,
+                    week_number=week,
+                    task=templates[week][index].format(
+                        skill=skill
+                    ),
+                    difficulty=difficulty,
+                    estimated_minutes=60
+                )
+            )
+
+    return StudyPlanAIResponse(
+        title=(
+            f"{payload.get('target_role') or 'Software Developer'} "
+            "Personalized Placement Plan"
+        ),
+        goal=(
+            "Improve the highest-priority skills identified "
+            "by the student's Phase 1 adaptive assessment."
+        ),
+        duration_weeks=4,
+        tasks=tasks
+    )
+

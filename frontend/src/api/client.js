@@ -1,4 +1,4 @@
-import axios from 'axios';
+﻿import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1';
 
@@ -194,4 +194,57 @@ export const adaptStudyPlan = async () => {
   }
 };
 
+// Phase 8: Get placement skill alignment
+export const getPlacementAlignment = async () => {
+  try {
+    const response = await apiClient.get('/placement/alignment');
+    return { success: true, data: response.data };
+  } catch (error) {
+    const errorMsg =
+      error.response?.data?.detail ||
+      'Failed to fetch placement alignment.';
+    return { success: false, error: errorMsg };
+  }
+};
+
+// Phase 8: Get available placement roles
+export const getPlacementRoles = async () => {
+  try {
+    const response = await apiClient.get('/placement/roles');
+    return { success: true, data: response.data };
+  } catch (error) {
+    const errorMsg =
+      error.response?.data?.detail ||
+      'Failed to fetch placement roles.';
+    return { success: false, error: errorMsg };
+  }
+};
+
+// Phase 9: Ask the student-aware AI study coach
+export const askStudyCoach = async (question) => {
+  try {
+    const response = await apiClient.post('/coach/ask', { question });
+    return { success: true, data: response.data };
+  } catch (error) {
+    const errorMsg =
+      error.response?.data?.detail ||
+      'Failed to get a response from the AI study coach.';
+    return { success: false, error: errorMsg };
+  }
+};
+
+// Phase 10: Get evidence-based achievements
+export const getAchievements = async () => {
+  try {
+    const response = await apiClient.get('/achievements');
+    return { success: true, data: response.data };
+  } catch (error) {
+    const errorMsg =
+      error.response?.data?.detail ||
+      'Failed to fetch achievements.';
+    return { success: false, error: errorMsg };
+  }
+};
 export default apiClient;
+
+

@@ -572,3 +572,147 @@ def update_task_status(
     db.refresh(task)
 
     return task
+# ============================================================
+# PHASE 2 - DIRECT PERSONALIZED PLAN FROM PHASE 1
+# ============================================================
+
+@router.post(
+    "/generate-personalized",
+    response_model=StudyPlanResponse,
+    summary="Generate study plan from Phase 1 adaptive analysis"
+)
+def generate_phase1_personalized_plan_endpoint(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    Generate a personalized study plan directly from
+    the deterministic Phase 1 adaptive analysis.
+    """
+
+    assessment = _get_latest_completed_assessment(
+        db,
+        current_user.id
+    )
+
+    if assessment is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=(
+                "No completed assessment found. "
+                "Complete an assessment before generating a study plan."
+            )
+        )
+
+    existing_plan = (
+        db.query(StudyPlan)
+        .filter(
+            StudyPlan.user_id == current_user.id,
+            StudyPlan.assessment_id == assessment.id
+        )
+        .first()
+    )
+
+    if existing_plan:
+        tasks = (
+            db.query(Task)
+            .filter(Task.study_plan_id == existing_plan.id)
+            .order_by(Task.week_number.asc(), Task.id.asc())
+            .all()
+        )
+        existing_plan.tasks = tasks
+        return existing_plan
+
+    profile = (
+        db.query(Profile)
+        .filter(Profile.user_id == current_user.id)
+        .first()
+    )
+
+    target_role = profile.target_role if profile else "Software Developer"
+    exp_level = profile.experience_level if profile else "Student"
+
+    from app.services.adaptive_engine import build_adaptive_analysis
+
+    try:
+        adaptive_analysis = build_adaptive_analysis(
+            current_user_id=current_user.id,
+            db=db
+        )
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc)
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to build adaptive analysis: {str(exc)}"
+        )
+
+    payload = build_phase1_personalized_plan_payload(
+        target_role=target_role,
+        experience_level=exp_level,
+        assessment_id=assessment.id,
+        overall_score=float(assessment.overall_score),
+        adaptive_analysis=adaptive_analysis
+    )
+
+    try:
+        validated_plan = generate_phase1_personalized_study_plan(payload)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=str(exc)
+        )
+
+    if len(validated_plan.tasks) != 20:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Personalized study plan must contain exactly 20 tasks."
+        )
+
+    new_plan = StudyPlan(
+        user_id=current_user.id,
+        assessment_id=assessment.id,
+        title=validated_plan.title,
+        goal=validated_plan.goal,
+        duration_weeks=validated_plan.duration_weeks
+    )
+
+    db.add(new_plan)
+    db.flush()
+
+    for task in validated_plan.tasks:
+        resource = get_study_resource(
+            skill=task.skill,
+            task=task.task
+        )
+
+        db.add(
+            Task(
+                study_plan_id=new_plan.id,
+                skill=task.skill,
+                week_number=task.week_number,
+                task=task.task,
+                difficulty=task.difficulty,
+                estimated_minutes=task.estimated_minutes,
+                resource_title=resource["title"],
+                resource_url=resource["url"],
+                status="pending"
+            )
+        )
+
+    db.commit()
+    db.refresh(new_plan)
+
+    tasks = (
+        db.query(Task)
+        .filter(Task.study_plan_id == new_plan.id)
+        .order_by(Task.week_number.asc(), Task.id.asc())
+        .all()
+    )
+
+    new_plan.tasks = tasks
+
+    return new_plan

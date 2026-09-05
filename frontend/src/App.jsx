@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Login } from './components/Login';
 import { Register } from './components/Register';
@@ -9,209 +9,369 @@ import { Dashboard } from './components/Dashboard';
 
 function MainApp() {
   const { user, logout } = useAuth();
-  const [activeTab, setActiveTab] = useState(user ? 'dashboard' : 'login');
+  const [activeTab, setActiveTab] = useState(
+    user ? 'dashboard' : 'login'
+  );
+  const [mobileMenuOpen, setMobileMenuOpen] =
+    useState(false);
+
+  useEffect(() => {
+    if (user && activeTab === 'login') {
+      setActiveTab('dashboard');
+    }
+
+    if (!user && !['login', 'register', 'health'].includes(activeTab)) {
+      setActiveTab('login');
+    }
+  }, [user, activeTab]);
+
+  const navigate = (tab) => {
+    setActiveTab(tab);
+    setMobileMenuOpen(false);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const firstName =
+    user?.name?.split(' ')[0] || 'Student';
 
   return (
-    <div className="container">
-      {/* Navigation Header */}
-      <header style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '2rem',
-        borderBottom: '1px solid #334155',
-        paddingBottom: '1.25rem'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '10px',
-            backgroundColor: 'var(--accent-primary)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold',
-            fontSize: '1.25rem',
-            color: '#fff'
-          }}>
-            SF
+    <div className="sf-app">
+      <header className="sf-header">
+        <div className="sf-header-inner">
+
+          {/* Brand */}
+
+          <button
+            className="sf-brand"
+            onClick={() =>
+              navigate(
+                user ? 'dashboard' : 'login'
+              )
+            }
+            aria-label="Go to SkillForge home"
+          >
+            <span className="sf-brand-mark">
+              SF
+            </span>
+
+            <span className="sf-brand-copy">
+              <strong>
+                SkillForge
+              </strong>
+
+              <small>
+                AI CAREER INTELLIGENCE
+              </small>
+            </span>
+          </button>
+
+          {/* Desktop navigation */}
+
+          <nav className="sf-nav">
+            {user ? (
+              <>
+                <button
+                  className={
+                    activeTab === 'dashboard'
+                      ? 'sf-nav-item sf-nav-active'
+                      : 'sf-nav-item'
+                  }
+                  onClick={() =>
+                    navigate('dashboard')
+                  }
+                >
+                  <span>Overview</span>
+                </button>
+
+                <button
+                  className={
+                    activeTab === 'assessment'
+                      ? 'sf-nav-item sf-nav-active'
+                      : 'sf-nav-item'
+                  }
+                  onClick={() =>
+                    navigate('assessment')
+                  }
+                >
+                  <span>Assessment</span>
+                </button>
+
+                <button
+                  className={
+                    activeTab === 'profile'
+                      ? 'sf-nav-item sf-nav-active'
+                      : 'sf-nav-item'
+                  }
+                  onClick={() =>
+                    navigate('profile')
+                  }
+                >
+                  <span>Profile</span>
+                </button>
+
+                <button
+                  className={
+                    activeTab === 'health'
+                      ? 'sf-nav-item sf-nav-active'
+                      : 'sf-nav-item'
+                  }
+                  onClick={() =>
+                    navigate('health')
+                  }
+                >
+                  <span>System</span>
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  className={
+                    activeTab === 'login'
+                      ? 'sf-nav-item sf-nav-active'
+                      : 'sf-nav-item'
+                  }
+                  onClick={() =>
+                    navigate('login')
+                  }
+                >
+                  Sign in
+                </button>
+
+                <button
+                  className={
+                    activeTab === 'health'
+                      ? 'sf-nav-item sf-nav-active'
+                      : 'sf-nav-item'
+                  }
+                  onClick={() =>
+                    navigate('health')
+                  }
+                >
+                  System
+                </button>
+              </>
+            )}
+          </nav>
+
+          {/* Account */}
+
+          <div className="sf-header-account">
+            {user ? (
+              <>
+                <div className="sf-user">
+                  <span className="sf-user-avatar">
+                    {firstName.charAt(0).toUpperCase()}
+                  </span>
+
+                  <span className="sf-user-name">
+                    {firstName}
+                  </span>
+                </div>
+
+                <button
+                  className="sf-logout"
+                  onClick={logout}
+                  title="Sign out"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <button
+                className="sf-register-button"
+                onClick={() =>
+                  navigate('register')
+                }
+              >
+                Create account
+                <span>→</span>
+              </button>
+            )}
           </div>
 
-          <div>
-            <h1 style={{
-              fontSize: '1.5rem',
-              fontWeight: 700,
-              background: 'linear-gradient(to right, #818cf8, #c084fc)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent'
-            }}>
-              SkillForge AI
-            </h1>
+          {/* Mobile button */}
 
-            <p style={{
-              fontSize: '0.8125rem',
-              color: 'var(--text-muted)'
-            }}>
-              Adaptive Placement Preparation Platform
-            </p>
-          </div>
+          <button
+            className="sf-mobile-toggle"
+            onClick={() =>
+              setMobileMenuOpen(
+                (current) => !current
+              )
+            }
+            aria-label="Toggle navigation"
+            aria-expanded={mobileMenuOpen}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
         </div>
 
-        <nav style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.75rem',
-          flexWrap: 'wrap'
-        }}>
-          {user ? (
-            <>
-              {/* Dashboard */}
-              <button
-                onClick={() => setActiveTab('dashboard')}
-                className="btn"
-                style={{
-                  backgroundColor:
+        {/* Mobile navigation */}
+
+        {mobileMenuOpen && (
+          <div className="sf-mobile-menu">
+            {user ? (
+              <>
+                <button
+                  onClick={() =>
+                    navigate('dashboard')
+                  }
+                  className={
                     activeTab === 'dashboard'
-                      ? '#334155'
-                      : 'transparent',
-                  color: 'var(--text-main)'
-                }}
-              >
-                Dashboard
-              </button>
+                      ? 'sf-mobile-item active'
+                      : 'sf-mobile-item'
+                  }
+                >
+                  Overview
+                </button>
 
-              {/* Assessment */}
-              <button
-                onClick={() => setActiveTab('assessment')}
-                className="btn"
-                style={{
-                  backgroundColor:
+                <button
+                  onClick={() =>
+                    navigate('assessment')
+                  }
+                  className={
                     activeTab === 'assessment'
-                      ? '#334155'
-                      : 'transparent',
-                  color: 'var(--text-main)'
-                }}
-              >
-                Assessment Engine
-              </button>
+                      ? 'sf-mobile-item active'
+                      : 'sf-mobile-item'
+                  }
+                >
+                  Assessment
+                </button>
 
-              {/* Profile */}
-              <button
-                onClick={() => setActiveTab('profile')}
-                className="btn"
-                style={{
-                  backgroundColor:
+                <button
+                  onClick={() =>
+                    navigate('profile')
+                  }
+                  className={
                     activeTab === 'profile'
-                      ? '#334155'
-                      : 'transparent',
-                  color: 'var(--text-main)'
-                }}
-              >
-                Profile Setup
-              </button>
+                      ? 'sf-mobile-item active'
+                      : 'sf-mobile-item'
+                  }
+                >
+                  Profile
+                </button>
 
-              {/* Diagnostics */}
-              <button
-                onClick={() => setActiveTab('health')}
-                className="btn"
-                style={{
-                  backgroundColor:
+                <button
+                  onClick={() =>
+                    navigate('health')
+                  }
+                  className={
                     activeTab === 'health'
-                      ? '#334155'
-                      : 'transparent',
-                  color: 'var(--text-muted)'
-                }}
-              >
-                Diagnostics
-              </button>
+                      ? 'sf-mobile-item active'
+                      : 'sf-mobile-item'
+                  }
+                >
+                  System
+                </button>
 
-              {/* Logout */}
-              <button
-                onClick={logout}
-                className="btn"
-                style={{
-                  backgroundColor: 'rgba(239, 68, 68, 0.2)',
-                  color: '#fca5a5',
-                  border: '1px solid rgba(239, 68, 68, 0.4)'
-                }}
-              >
-                Logout ({user.name.split(' ')[0]})
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={() => setActiveTab('login')}
-                className="btn"
-                style={{
-                  backgroundColor:
-                    activeTab === 'login'
-                      ? '#334155'
-                      : 'transparent',
-                  color: 'var(--text-main)'
-                }}
-              >
-                Login
-              </button>
+                <button
+                  onClick={() => {
+                    logout();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="sf-mobile-item sf-mobile-logout"
+                >
+                  Sign out
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() =>
+                    navigate('login')
+                  }
+                  className="sf-mobile-item"
+                >
+                  Sign in
+                </button>
 
-              <button
-                onClick={() => setActiveTab('register')}
-                className="btn btn-primary"
-              >
-                Register
-              </button>
+                <button
+                  onClick={() =>
+                    navigate('register')
+                  }
+                  className="sf-mobile-item active"
+                >
+                  Create account
+                </button>
 
-              <button
-                onClick={() => setActiveTab('health')}
-                className="btn"
-                style={{
-                  backgroundColor:
-                    activeTab === 'health'
-                      ? '#334155'
-                      : 'transparent',
-                  color: 'var(--text-muted)'
-                }}
-              >
-                Diagnostics
-              </button>
-            </>
-          )}
-        </nav>
+                <button
+                  onClick={() =>
+                    navigate('health')
+                  }
+                  className="sf-mobile-item"
+                >
+                  System
+                </button>
+              </>
+            )}
+          </div>
+        )}
       </header>
 
-      {/* Main View Area */}
-      <main>
-        {!user && activeTab === 'login' && (
-          <Login
-            onSwitchToRegister={() => setActiveTab('register')}
-            onSuccess={() => setActiveTab('dashboard')}
-          />
-        )}
+      <main className="sf-main">
+        {!user &&
+          activeTab === 'login' && (
+            <Login
+              onSwitchToRegister={() =>
+                setActiveTab('register')
+              }
+              onSuccess={() =>
+                setActiveTab('dashboard')
+              }
+            />
+          )}
 
-        {!user && activeTab === 'register' && (
-          <Register
-            onSwitchToLogin={() => setActiveTab('login')}
-            onSuccess={() => setActiveTab('dashboard')}
-          />
-        )}
+        {!user &&
+          activeTab === 'register' && (
+            <Register
+              onSwitchToLogin={() =>
+                setActiveTab('login')
+              }
+              onSuccess={() =>
+                setActiveTab('dashboard')
+              }
+            />
+          )}
 
-        {user && activeTab === 'dashboard' && (
-          <Dashboard />
-        )}
+        {user &&
+          activeTab === 'dashboard' && (
+            <Dashboard />
+          )}
 
-        {user && activeTab === 'assessment' && (
-          <Assessment />
-        )}
+        {user &&
+          activeTab === 'assessment' && (
+            <Assessment />
+          )}
 
-        {user && activeTab === 'profile' && (
-          <Profile />
-        )}
+        {user &&
+          activeTab === 'profile' && (
+            <Profile />
+          )}
 
         {activeTab === 'health' && (
           <HealthStatus />
         )}
       </main>
+
+      <footer className="sf-footer">
+        <div>
+          <strong>
+            SkillForge AI
+          </strong>
+
+          <span>
+            Adaptive placement intelligence
+          </span>
+        </div>
+
+        <span>
+          Built for smarter preparation.
+        </span>
+      </footer>
     </div>
   );
 }
