@@ -6,8 +6,10 @@ import { Profile } from './components/Profile';
 import { Assessment } from './components/Assessment';
 import { HealthStatus } from './components/HealthStatus';
 import { Dashboard } from './components/Dashboard';
+import { BackendStartup } from './components/BackendStartup';
 
 function MainApp() {
+  const [backendReady, setBackendReady] = useState(false);
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState(
     user ? 'dashboard' : 'login'
@@ -36,6 +38,10 @@ function MainApp() {
 
   const firstName =
     user?.name?.split(' ')[0] || 'Student';
+
+  if (!backendReady) {
+    return <BackendStartup onReady={() => setBackendReady(true)} />;
+  }
 
   return (
     <div className="sf-app">
@@ -383,3 +389,4 @@ export default function App() {
     </AuthProvider>
   );
 }
+
