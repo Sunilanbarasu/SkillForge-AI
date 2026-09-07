@@ -1,5 +1,4 @@
 ﻿import React, { useEffect, useMemo, useState } from 'react';
-import DailyChallenge from './DailyChallenge';
 import {
   askStudyCoach,
   getCurrentProgress,
@@ -850,11 +849,6 @@ export function Dashboard() {
             </button>
           </section>
         )}
-
-        {/* =========================
-            DAILY AI CODING CHALLENGE
-        ========================== */}
-        <DailyChallenge />
 
         {/* =========================
             PLACEMENT ALIGNMENT

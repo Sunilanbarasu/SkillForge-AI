@@ -245,48 +245,6 @@ export const getAchievements = async () => {
     return { success: false, error: errorMsg };
   }
 };
-
-// Daily AI Coding Challenge
-export const getDailyChallenge = async () => {
-  try {
-    const response = await apiClient.get('/daily-challenge/today');
-    return { success: true, data: response.data };
-  } catch (error) {
-    const errorMsg =
-      error.response?.data?.detail ||
-      "Failed to fetch today's coding challenge.";
-    return { success: false, error: errorMsg };
-  }
-};
-
-export const submitDailyChallenge = async (challengeId, code) => {
-  try {
-    const response = await apiClient.post('/daily-challenge/submit', {
-      challenge_id: challengeId,
-      code,
-    });
-    return { success: true, data: response.data };
-  } catch (error) {
-    const errorMsg =
-      error.response?.data?.detail ||
-      'Failed to submit the coding challenge.';
-    return { success: false, error: errorMsg };
-  }
-};
-
-export const getCodingStreak = async () => {
-  try {
-    const response = await apiClient.get('/daily-challenge/streak');
-    return { success: true, data: response.data };
-  } catch (error) {
-    const errorMsg =
-      error.response?.data?.detail ||
-      'Failed to fetch coding streak.';
-    return { success: false, error: errorMsg };
-  }
-};
-
 export default apiClient;
-
 
 

@@ -366,40 +366,15 @@ SEED_QUESTIONS = [
 
 
 def seed_questions_if_empty(db_session):
-    """Add missing curated questions without modifying existing questions."""
+    """Seed the 35 curated placement questions into PostgreSQL if table is empty."""
     from app.models.question import Question
-
-    existing_questions = {
-        (
-            q.skill,
-            q.question_text
-        )
-        for q in db_session.query(Question).all()
-    }
-
-    added_count = 0
-
-    for q_data in SEED_QUESTIONS:
-        question_key = (
-            q_data["skill"],
-            q_data["question_text"]
-        )
-
-        if question_key in existing_questions:
-            continue
-
-        db_session.add(Question(**q_data))
-        existing_questions.add(question_key)
-        added_count += 1
-
-    if added_count > 0:
+    
+    count = db_session.query(Question).count()
+    if count == 0:
+        for q_data in SEED_QUESTIONS:
+            q = Question(**q_data)
+            db_session.add(q)
         db_session.commit()
-        print(
-            f"Successfully added {added_count} new placement questions. "
-            f"Total questions: {db_session.query(Question).count()}."
-        )
+        print(f"Successfully seeded {len(SEED_QUESTIONS)} placement questions into PostgreSQL.")
     else:
-        print(
-            f"No new questions needed. "
-            f"Total questions: {db_session.query(Question).count()}."
-        )
+        print(f"Questions table already populated with {count} questions.")

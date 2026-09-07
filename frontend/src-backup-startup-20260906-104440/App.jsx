@@ -6,36 +6,14 @@ import { Profile } from './components/Profile';
 import { Assessment } from './components/Assessment';
 import { HealthStatus } from './components/HealthStatus';
 import { Dashboard } from './components/Dashboard';
-import { BackendStartup } from './components/BackendStartup';
 
 function MainApp() {
-  const [backendReady, setBackendReady] = useState(false);
   const { user, logout } = useAuth();
-
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem("skillforge_theme");
-
-    if (savedTheme === "dark" || savedTheme === "light") {
-      return savedTheme;
-    }
-
-    return window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-  });
-
-
   const [activeTab, setActiveTab] = useState(
     user ? 'dashboard' : 'login'
   );
   const [mobileMenuOpen, setMobileMenuOpen] =
     useState(false);
-
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", theme);
-    localStorage.setItem("skillforge_theme", theme);
-  }, [theme]);
 
   useEffect(() => {
     if (user && activeTab === 'login') {
@@ -56,18 +34,8 @@ function MainApp() {
     });
   };
 
-  const toggleTheme = () => {
-    setTheme((currentTheme) =>
-      currentTheme === "dark" ? "light" : "dark"
-    );
-  };
-
   const firstName =
     user?.name?.split(' ')[0] || 'Student';
-
-  if (!backendReady) {
-    return <BackendStartup onReady={() => setBackendReady(true)} />;
-  }
 
   return (
     <div className="sf-app">
@@ -187,35 +155,6 @@ function MainApp() {
               </>
             )}
           </nav>
-
-          {/* Theme */}
-
-          <button
-            className="sf-theme-toggle"
-            onClick={toggleTheme}
-            type="button"
-            aria-label={
-              theme === "dark"
-                ? "Switch to light mode"
-                : "Switch to dark mode"
-            }
-            title={
-              theme === "dark"
-                ? "Switch to light mode"
-                : "Switch to dark mode"
-            }
-          >
-            <span className="sf-theme-icon">
-              {theme === "dark" ? "☀️" : "🌙"}
-            </span>
-            <span className="sf-theme-label">
-              {theme === "dark" ? "Light" : "Dark"}
-            </span>
-          </button>
-
-          {/* Theme */}
-
-          
 
           {/* Account */}
 
@@ -444,4 +383,3 @@ export default function App() {
     </AuthProvider>
   );
 }
-

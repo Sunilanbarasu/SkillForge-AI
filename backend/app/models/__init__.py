@@ -18,3 +18,8 @@ __all__ = [
     "Task",
     "SkillProgress",
 ]
+from app.models.coding_challenge import CodingChallenge
+from app.models.daily_challenge import DailyChallenge
+
+from app.models.coding_streak import CodingStreak
+from app.models.coding_submission import CodingSubmission

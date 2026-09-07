@@ -7,8 +7,7 @@ import {
   generateAIAnalysis,
   generateStudyPlan,
   getCurrentStudyPlan,
-  updateTaskStatus,
-  getStudentProfile
+  updateTaskStatus
 } from '../api/client';
 
 export function Assessment() {
@@ -18,25 +17,6 @@ export function Assessment() {
   const [planLoading, setPlanLoading] = useState(false);
   const [studyPlan, setStudyPlan] = useState(null);
   const [errorMsg, setErrorMsg] = useState('');
-
-  // Role-aware assessment metadata returned by the backend
-  const [targetRole, setTargetRole] = useState('');
-  const [assessmentDifficulty, setAssessmentDifficulty] = useState('');
-
-  // Load the student's saved target role before the assessment starts.
-  React.useEffect(() => {
-    const loadProfileForAssessment = async () => {
-      const res = await getStudentProfile();
-
-      if (res.success) {
-        setTargetRole(res.data.target_role || 'Software Engineer');
-        setAssessmentDifficulty(res.data.experience_level || 'Not specified');
-      }
-    };
-
-    loadProfileForAssessment();
-  }, []);
-
   
   // Active Assessment State
   const [assessmentId, setAssessmentId] = useState(null);
@@ -62,8 +42,6 @@ export function Assessment() {
     if (res.success) {
       setAssessmentId(res.data.assessment_id);
       setQuestions(res.data.questions);
-      setTargetRole(res.data.target_role || 'Software Engineer');
-      setAssessmentDifficulty(res.data.difficulty || 'Not specified');
       setCurrentIndex(0);
       setUserAnswers({});
       setViewState('taking');
@@ -184,16 +162,6 @@ export function Assessment() {
   const answeredCount = Object.keys(userAnswers).length;
   const progressPercent = questions.length > 0 ? Math.round(((currentIndex + 1) / questions.length) * 100) : 0;
 
-  // Derive the assessment scope from the actual questions returned by the backend.
-  const assessmentSkills = [...new Set(
-    questions.map((question) => question.skill).filter(Boolean)
-  )];
-
-  const assessmentSkillCounts = assessmentSkills.map((skill) => ({
-    skill,
-    count: questions.filter((question) => question.skill === skill).length
-  }));
-
   return (
     <div style={{ maxWidth: '920px', margin: '1.5rem auto' }}>
 
@@ -201,10 +169,10 @@ export function Assessment() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
         <div>
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-main)' }}>
-            {targetRole ? `${targetRole} Placement Assessment` : 'Placement Diagnostic Assessment'}
+            Placement Diagnostic Assessment
           </h2>
           <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-            This assessment is personalized for your target profession and evaluates the skills most relevant to your placement goal.
+            Evaluate your readiness across Python, C, DSA, SQL, OOP, DBMS, and Aptitude.
           </p>
         </div>
         {viewState !== 'taking' && (
@@ -284,31 +252,15 @@ export function Assessment() {
             </span>
           </div>
 
-          <div style={{ width: '100%', height: '6px', backgroundColor: 'var(--surface-soft)', borderRadius: '999px', overflow: 'hidden', marginBottom: '1.5rem', border: '1px solid var(--border)' }}>
-            <div style={{ width: `${progressPercent}%`, height: '100%', backgroundColor: 'var(--primary)', transition: 'width 0.3s ease' }} />
+          <div style={{ width: '100%', height: '6px', backgroundColor: '#0f172a', borderRadius: '4px', overflow: 'hidden', marginBottom: '1.5rem' }}>
+            <div style={{ width: `${progressPercent}%`, height: '100%', backgroundColor: 'var(--accent-primary)', transition: 'width 0.3s ease' }} />
           </div>
 
-          <h3
-            style={{
-              fontSize: '1.25rem',
-              fontWeight: 700,
-              color: 'var(--text)',
-              marginBottom: '1.5rem',
-              lineHeight: '1.6',
-              letterSpacing: '-0.01em'
-            }}
-          >
+          <h3 style={{ fontSize: '1.1875rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '1.5rem', lineHeight: '1.5' }}>
             {currentQ.question_text}
           </h3>
 
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.75rem',
-              marginBottom: '2rem'
-            }}
-          >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '2rem' }}>
             {[
               { key: 'A', text: currentQ.option_a },
               { key: 'B', text: currentQ.option_b },
@@ -316,86 +268,41 @@ export function Assessment() {
               { key: 'D', text: currentQ.option_d },
             ].map(opt => {
               const isSelected = userAnswers[currentQ.id] === opt.key;
-
               return (
-                <button
+                <div
                   key={opt.key}
-                  type="button"
                   onClick={() => handleSelectOption(currentQ.id, opt.key)}
                   style={{
-                    width: '100%',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '1rem',
-                    padding: '1rem 1.15rem',
-                    borderRadius: '14px',
-                    border: isSelected
-                      ? '2px solid var(--primary)'
-                      : '1px solid var(--border)',
-                    backgroundColor: isSelected
-                      ? 'var(--primary-soft)'
-                      : 'var(--surface)',
-                    color: 'var(--text)',
+                    padding: '0.875rem 1.25rem',
+                    borderRadius: '8px',
+                    border: isSelected ? '2px solid var(--accent-primary)' : '1px solid #334155',
+                    backgroundColor: isSelected ? 'rgba(99, 102, 241, 0.15)' : '#0f172a',
                     cursor: 'pointer',
-                    textAlign: 'left',
-                    transition: 'all 0.18s ease',
-                    boxShadow: isSelected
-                      ? '0 8px 24px rgba(99, 91, 255, 0.14)'
-                      : 'var(--shadow-sm)'
+                    transition: 'all 0.15s ease'
                   }}
                 >
-                  <span
-                    style={{
-                      flexShrink: 0,
-                      width: '38px',
-                      height: '38px',
-                      borderRadius: '12px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      border: isSelected
-                        ? 'none'
-                        : '1px solid var(--border-strong)',
-                      backgroundColor: isSelected
-                        ? 'var(--primary)'
-                        : 'var(--surface-soft)',
-                      color: isSelected
-                        ? '#ffffff'
-                        : 'var(--text)',
-                      fontWeight: 800,
-                      fontSize: '0.875rem',
-                      boxShadow: isSelected
-                        ? '0 6px 16px rgba(99, 91, 255, 0.25)'
-                        : 'none'
-                    }}
-                  >
+                  <div style={{
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '50%',
+                    border: isSelected ? 'none' : '1px solid #475569',
+                    backgroundColor: isSelected ? 'var(--accent-primary)' : 'transparent',
+                    color: '#fff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 600,
+                    fontSize: '0.875rem'
+                  }}>
                     {opt.key}
-                  </span>
-
-                  <span
-                    style={{
-                      flex: 1,
-                      fontSize: '0.975rem',
-                      fontWeight: isSelected ? 700 : 600,
-                      color: 'var(--text)',
-                      lineHeight: '1.5'
-                    }}
-                  >
+                  </div>
+                  <div style={{ fontSize: '0.9375rem', color: isSelected ? '#fff' : 'var(--text-main)' }}>
                     {opt.text}
-                  </span>
-
-                  {isSelected && (
-                    <span
-                      style={{
-                        color: 'var(--primary)',
-                        fontSize: '1.1rem',
-                        fontWeight: 900
-                      }}
-                    >
-                      ✓
-                    </span>
-                  )}
-                </button>
+                  </div>
+                </div>
               );
             })}
           </div>

@@ -1,12 +1,31 @@
-from pydantic import BaseModel, Field
+﻿from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import datetime
 
 
+class AssessmentStartRequest(BaseModel):
+    """
+    Configuration selected before starting an assessment.
+
+    Both fields are optional for backwards compatibility.
+    """
+    target_role: Optional[str] = Field(
+        default=None,
+        max_length=100,
+        description="Target profession selected by the student"
+    )
+
+    difficulty: Optional[str] = Field(
+        default=None,
+        max_length=20,
+        description="Assessment difficulty: Beginner, Intermediate, or Advanced"
+    )
+
+
 class QuestionOut(BaseModel):
     """
-    Public question schema returned to student during assessment.
-    CRITICAL SECURITY RULE: correct_answer is NEVER exposed!
+    Public question schema returned to student.
+    CRITICAL SECURITY RULE: correct_answer is NEVER exposed.
     """
     id: int
     skill: str
@@ -25,12 +44,18 @@ class AssessmentStartResponse(BaseModel):
     assessment_id: int
     total_questions: int
     started_at: datetime
+    target_role: Optional[str] = None
+    difficulty: Optional[str] = None
     questions: List[QuestionOut]
 
 
 class AnswerSubmitItem(BaseModel):
     question_id: int
-    selected_answer: str = Field(..., pattern="^[A-Da-d]$", description="Answer choice: 'A', 'B', 'C', or 'D'")
+    selected_answer: str = Field(
+        ...,
+        pattern="^[A-Da-d]$",
+        description="Answer choice: 'A', 'B', 'C', or 'D'"
+    )
 
 
 class AssessmentSubmitRequest(BaseModel):

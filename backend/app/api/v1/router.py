@@ -1,6 +1,7 @@
 ﻿from fastapi import APIRouter
 
 from app.api.v1.endpoints import (
+    daily_challenge,
     health,
     auth,
     users,
@@ -81,4 +82,10 @@ api_router.include_router(
     achievements.router,
     prefix="/achievements",
     tags=["Achievements"],
+)
+
+api_router.include_router(
+    daily_challenge.router,
+    prefix="/daily-challenge",
+    tags=["Daily Coding Challenge"],
 )

@@ -19,139 +19,44 @@ from app.schemas.assessment import (
 )
 from app.schemas.ai_analysis import AIAnalysisResponse
 from app.services.ai_analysis import build_ai_input_payload, generate_skill_gap_analysis
-from app.services.role_profiles import get_role_profile, get_role_skills
 from app.api.deps import get_current_user
 
 router = APIRouter()
 
 
-@router.post(
-    "/start",
-    response_model=AssessmentStartResponse,
-    status_code=status.HTTP_201_CREATED,
-    summary="Start a role-aware placement diagnostic assessment"
-)
+@router.post("/start", response_model=AssessmentStartResponse, status_code=status.HTTP_201_CREATED, summary="Start a placement diagnostic assessment")
 def start_assessment(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     """
-    Creates a new personalized assessment for the authenticated student.
-
-    Question selection is based on the student's target profession:
-    - Reads Profile.target_role.
-    - Loads the corresponding role profile.
-    - Selects up to 3 questions per required role skill.
-    - Balances available difficulty levels.
-    - Correct answers are NEVER returned.
+    Creates a new assessment for the authenticated student and fetches questions.
+    SECURITY REQUIREMENT: Correct answers are NEVER returned.
     """
-    profile = (
-        db.query(Profile)
-        .filter(Profile.user_id == current_user.id)
-        .first()
-    )
-
-    target_role = (
-        profile.target_role
-        if profile and profile.target_role
-        else "Software Developer"
-    )
-
-    role_profile = get_role_profile(target_role)
-
-    if role_profile is None:
-        target_role = "Software Developer"
-        role_profile = get_role_profile(target_role)
-
-    role_skills = get_role_skills(target_role)
-
-    if not role_skills:
+    questions = db.query(Question).order_by(Question.id.asc()).all()
+    if not questions:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="No skills configured for the selected target role."
-        )
-
-    selected_questions = []
-
-    # Select up to 3 questions from every skill required by the role.
-    # Prefer a spread of available difficulty levels.
-    for skill in role_skills:
-        skill_questions = (
-            db.query(Question)
-            .filter(Question.skill == skill)
-            .order_by(Question.id.asc())
-            .all()
-        )
-
-        if not skill_questions:
-            continue
-
-        beginner = [
-            q for q in skill_questions
-            if q.difficulty.strip().lower() == "beginner"
-        ]
-        intermediate = [
-            q for q in skill_questions
-            if q.difficulty.strip().lower() == "intermediate"
-        ]
-        advanced = [
-            q for q in skill_questions
-            if q.difficulty.strip().lower() == "advanced"
-        ]
-
-        skill_selection = []
-
-        # Build a balanced assessment where possible.
-        for pool in (beginner, intermediate, advanced):
-            if pool and len(skill_selection) < 3:
-                skill_selection.append(pool[0])
-
-        # Fill remaining slots from the complete skill pool.
-        if len(skill_selection) < 3:
-            selected_ids = {q.id for q in skill_selection}
-
-            for question in skill_questions:
-                if question.id not in selected_ids:
-                    skill_selection.append(question)
-
-                if len(skill_selection) >= 3:
-                    break
-
-        selected_questions.extend(skill_selection[:3])
-
-    if not selected_questions:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"No assessment questions available for target role: {target_role}."
+            detail="No assessment questions available in database."
         )
 
     new_assessment = Assessment(
         user_id=current_user.id,
         started_at=datetime.now(timezone.utc),
-        total_questions=len(selected_questions),
+        total_questions=len(questions),
         total_correct=0,
         overall_score=0.0
     )
-
     db.add(new_assessment)
     db.commit()
     db.refresh(new_assessment)
 
-    question_outs = [
-        QuestionOut.model_validate(question)
-        for question in selected_questions
-    ]
+    question_outs = [QuestionOut.model_validate(q) for q in questions]
 
     return AssessmentStartResponse(
         assessment_id=new_assessment.id,
-        total_questions=len(selected_questions),
+        total_questions=len(questions),
         started_at=new_assessment.started_at,
-        target_role=target_role,
-        difficulty=(
-            profile.experience_level
-            if profile and profile.experience_level
-            else None
-        ),
         questions=question_outs
     )
 
