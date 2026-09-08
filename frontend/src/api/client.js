@@ -79,7 +79,23 @@ export const updateStudentProfile = async (profileData) => {
     const response = await apiClient.put('/profile', profileData);
     return { success: true, data: response.data };
   } catch (error) {
-    const errorMsg = error.response?.data?.detail || 'Failed to update profile.';
+    const detail = error.response?.data?.detail;
+
+    let errorMsg = 'Failed to update profile.';
+
+    if (Array.isArray(detail)) {
+      errorMsg = detail
+        .map((item) => {
+          if (typeof item === 'string') return item;
+          return item?.msg || 'Invalid profile field.';
+        })
+        .join(' ');
+    } else if (typeof detail === 'string') {
+      errorMsg = detail;
+    } else if (detail && typeof detail === 'object') {
+      errorMsg = detail.msg || 'Invalid profile data.';
+    }
+
     return { success: false, error: errorMsg };
   }
 };

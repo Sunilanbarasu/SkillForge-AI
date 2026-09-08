@@ -13,6 +13,9 @@ class Assessment(Base):
     total_questions = Column(Integer, default=0, nullable=False)
     total_correct = Column(Integer, default=0, nullable=False)
     overall_score = Column(Float, default=0.0, nullable=False)
+    target_role = Column(String(100), nullable=True, index=True)
+    difficulty = Column(String(20), nullable=True)
+
 
     # Relationships
     user = relationship("User", backref="assessments")

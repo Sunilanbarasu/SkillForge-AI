@@ -1,70 +1,64 @@
-﻿from typing import Dict, List, Any
 
 
-# ============================================================
-# PHASE 8 - PLACEMENT / JOB SKILL ALIGNMENT
-# ============================================================
-#
-# IMPORTANT:
-# These requirements intentionally use ONLY skills currently
-# measured by SkillForge assessments.
-#
-# No score is invented for an untested skill.
-# ============================================================
+from app.services.role_profiles import ROLE_PROFILES, DEFAULT_ROLE
+from app.services.career_skill_profiles import get_career_skill_profile
 
-ROLE_REQUIREMENTS: Dict[str, Dict[str, float]] = {
-    "Software Developer": {
-        "DSA": 75,
-        "Python": 70,
-        "OOP": 70,
-        "SQL": 65,
-        "DBMS": 65,
-        "C": 60,
-        "Aptitude": 70,
-    },
-    "Software Engineer": {
-        "DSA": 75,
-        "Python": 70,
-        "OOP": 70,
-        "SQL": 65,
-        "DBMS": 65,
-        "C": 60,
-        "Aptitude": 70,
-    },
-
-    "Full Stack Developer": {
-        "Python": 65,
-        "OOP": 70,
-        "SQL": 65,
-        "DBMS": 65,
-        "DSA": 70,
-        "Aptitude": 65,
-    },
-
-    "Data Analyst": {
-        "Python": 70,
-        "SQL": 80,
-        "DBMS": 70,
-        "Aptitude": 65,
-        "DSA": 60,
-    },
-
-    "AI/ML Engineer": {
-        "Python": 80,
-        "DSA": 75,
-        "OOP": 70,
-        "SQL": 60,
-        "DBMS": 60,
-        "Aptitude": 65,
-    },
+# Backward-compatible export used by existing placement endpoints.
+# Requirements are derived from the central role profiles so each
+# detailed role keeps its own skill requirements.
+ROLE_REQUIREMENTS = {
+    role: {
+        skill: (
+            75 if float(weight) >= 0.95 else
+            70 if float(weight) >= 0.85 else
+            65 if float(weight) >= 0.75 else
+            60 if float(weight) >= 0.65 else
+            55 if float(weight) >= 0.55 else
+            50
+        )
+        for skill, weight in profile["skills"].items()
+    }
+    for role, profile in ROLE_PROFILES.items()
 }
 
+def get_role_requirements(target_role):
+    """
+    Build placement requirements from the authoritative career profile.
 
-def get_role_requirements(target_role: str) -> Dict[str, float]:
-    return ROLE_REQUIREMENTS.get(
-        target_role,
-        ROLE_REQUIREMENTS["Software Developer"],
-    )
+    Supports both the original detailed roles and the expanded 91-career
+    catalog without silently converting an expanded career to Software Engineer.
+    """
+    career_profile = get_career_skill_profile(target_role)
+
+    if career_profile:
+        role_skills = career_profile.get("skills", {})
+    elif target_role in ROLE_PROFILES:
+        role_skills = ROLE_PROFILES[target_role]["skills"]
+    else:
+        role_skills = ROLE_PROFILES[DEFAULT_ROLE]["skills"]
+
+    weight_to_target = {
+        1.00: 75,
+        0.95: 75,
+        0.90: 70,
+        0.85: 70,
+        0.80: 65,
+        0.75: 65,
+        0.70: 60,
+        0.65: 60,
+        0.60: 55,
+        0.55: 55,
+        0.50: 50,
+        0.45: 50,
+        0.40: 50,
+        0.35: 50,
+        0.30: 50,
+    }
+
+    return {
+        skill: weight_to_target.get(round(float(weight), 2), 60)
+        for skill, weight in role_skills.items()
+    }
 
 
 def classify_gap(gap: float) -> str:
@@ -85,10 +79,15 @@ def build_placement_alignment(
     skill_scores: List[Dict[str, Any]],
 ) -> Dict[str, Any]:
     """
-    Compare real SkillForge assessment scores against
-    the selected placement role requirements.
+    Compare real SkillForge assessment scores against the
+    requirements of the student's selected target role.
+
+    The skills displayed here come from the selected career profile.
     """
 
+    # get_role_requirements() supports both the original detailed
+    # roles and the expanded 91-career catalog.
+    # Do NOT force expanded careers back to Software Engineer.
     requirements = get_role_requirements(target_role)
 
     student_scores = {
@@ -133,6 +132,7 @@ def build_placement_alignment(
                     100,
                 )
                 for item in skills
+                if item["required_score"] > 0
             ) / len(skills),
             2,
         )
@@ -161,11 +161,7 @@ def build_placement_alignment(
     ]
 
     return {
-        "target_role": (
-            target_role
-            if target_role in ROLE_REQUIREMENTS
-            else "Software Developer"
-        ),
+        "target_role": target_role,
         "alignment_score": alignment_score,
         "ready_count": ready_count,
         "near_ready_count": near_ready_count,
@@ -173,4 +169,3 @@ def build_placement_alignment(
         "priority_gaps": needs_improvement[:3],
         "skills": skills,
     }
-

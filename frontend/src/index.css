@@ -3478,3 +3478,2742 @@ button {
     box-shadow 0.25s ease;
 }
 
+
+/* =========================================================
+   PLACEMENT READINESS DASHBOARD
+   ========================================================= */
+
+.sf-dashboard {
+  min-height: calc(100vh - 76px);
+  padding: 42px 24px 80px;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.sf-container {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+}
+
+.sf-dashboard .sf-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 390px;
+  gap: 32px;
+  align-items: end;
+  margin-bottom: 28px;
+}
+
+.sf-dashboard .sf-hero h1 {
+  margin: 8px 0 14px;
+  font-size: clamp(42px, 5vw, 68px);
+  line-height: .98;
+  letter-spacing: -0.055em;
+  color: var(--text);
+}
+
+.sf-dashboard .sf-hero h1 span {
+  color: var(--primary);
+}
+
+.sf-dashboard .sf-hero p {
+  max-width: 650px;
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.sf-dashboard .sf-kicker {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.sf-dashboard .sf-readiness {
+  padding: 28px;
+  border-radius: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 0 12px 35px rgba(0,0,0,.08);
+}
+
+.sf-dashboard .sf-readiness-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.sf-dashboard .sf-readiness-top span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  color: var(--text-muted);
+}
+
+.sf-dashboard .sf-readiness-top strong {
+  font-size: 42px;
+  line-height: 1;
+  letter-spacing: -.05em;
+  color: var(--text);
+}
+
+.sf-dashboard .sf-progress-track {
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--surface-soft);
+}
+
+.sf-dashboard .sf-progress-fill {
+  height: 100%;
+  min-width: 0;
+  border-radius: inherit;
+  background: var(--primary);
+  transition: width .5s ease;
+}
+
+.sf-dashboard .sf-readiness-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.sf-dashboard .sf-readiness-meta span:last-child {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.sf-dashboard .sf-panel {
+  margin-bottom: 20px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface);
+  box-shadow: 0 8px 25px rgba(0,0,0,.045);
+}
+
+.sf-dashboard .sf-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 12px;
+}
+
+.sf-dashboard .sf-panel h2 {
+  margin: 7px 0 0;
+  font-size: 25px;
+  line-height: 1.2;
+  letter-spacing: -.025em;
+  color: var(--text);
+}
+
+.sf-dashboard .sf-muted {
+  margin: 12px 0 0;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.sf-dashboard .sf-badge {
+  flex-shrink: 0;
+  padding: 7px 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .1em;
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
+.sf-dashboard .sf-skill-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.sf-dashboard .sf-skill-card {
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface-soft);
+}
+
+.sf-dashboard .sf-skill-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sf-dashboard .sf-skill-card-top strong {
+  font-size: 15px;
+  color: var(--text);
+}
+
+.sf-dashboard .sf-skill-card-top span {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.sf-dashboard .sf-skill-card .sf-progress-track {
+  height: 7px;
+}
+
+.sf-dashboard .sf-skill-status {
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.sf-dashboard .sf-two-column {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.sf-dashboard .sf-gap-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.sf-dashboard .sf-gap-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-radius: 13px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+}
+
+.sf-dashboard .sf-gap-item span {
+  font-weight: 650;
+  color: var(--text);
+}
+
+.sf-dashboard .sf-gap-item strong {
+  color: var(--primary);
+}
+
+.sf-dashboard .sf-score-comparison {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.sf-dashboard .sf-score-comparison > div:not(.sf-arrow) {
+  flex: 1;
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+}
+
+.sf-dashboard .sf-score-comparison span {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: var(--text-muted);
+}
+
+.sf-dashboard .sf-score-comparison strong {
+  font-size: 32px;
+  color: var(--text);
+}
+
+.sf-dashboard .sf-arrow {
+  font-size: 24px;
+  color: var(--primary);
+}
+
+.sf-dashboard .sf-change {
+  margin-top: 14px;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+.sf-dashboard .sf-alignment-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.sf-dashboard .sf-alignment-stats > div {
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+}
+
+.sf-dashboard .sf-alignment-stats span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.sf-dashboard .sf-alignment-stats strong {
+  font-size: 30px;
+  color: var(--text);
+}
+
+.sf-dashboard .sf-large-score {
+  font-size: 36px;
+  color: var(--primary);
+}
+
+.sf-dashboard .sf-next-assessment {
+  display: flex;
+  align-items: center;
+  min-height: 150px;
+  background: var(--primary-soft);
+}
+
+.sf-dashboard .sf-next-assessment h2 {
+  margin-bottom: 8px;
+}
+
+.sf-dashboard .sf-empty {
+  margin-top: 22px;
+  padding: 28px;
+  text-align: center;
+  border-radius: 16px;
+  background: var(--surface-soft);
+  border: 1px dashed var(--border-strong);
+}
+
+.sf-dashboard .sf-empty h3 {
+  margin: 0 0 8px;
+  color: var(--text);
+}
+
+.sf-dashboard .sf-empty p {
+  margin: 0;
+  color: var(--text-secondary);
+}
+
+.sf-dashboard .sf-error {
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface-soft);
+  color: var(--text);
+}
+
+.sf-dashboard .sf-loading {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--text-secondary);
+}
+
+.sf-dashboard .sf-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: sf-spin .8s linear infinite;
+}
+
+@keyframes sf-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 850px) {
+  .sf-dashboard {
+    padding: 28px 16px 60px;
+  }
+
+  .sf-dashboard .sf-hero,
+  .sf-dashboard .sf-two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .sf-dashboard .sf-skill-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .sf-dashboard .sf-hero h1 {
+    font-size: 42px;
+  }
+
+  .sf-dashboard .sf-panel {
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  .sf-dashboard .sf-readiness {
+    padding: 20px;
+  }
+
+  .sf-dashboard .sf-alignment-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .sf-dashboard .sf-score-comparison {
+    gap: 8px;
+  }
+
+  .sf-dashboard .sf-score-comparison strong {
+    font-size: 25px;
+  }
+}
+
+
+/* Assessment vs placement-readiness metric separation */
+.sf-dashboard .sf-assessment-performance {
+  margin-top: 20px;
+}
+
+.sf-dashboard .sf-assessment-performance h2 {
+  margin: 6px 0 0;
+  font-size: 36px;
+  line-height: 1;
+}
+
+.sf-dashboard .sf-metric-explanation {
+  margin-top: 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   SKILLFORGE AI ? ADVANCED VISUAL SYSTEM
+   High contrast + glassmorphism + motion
+   ========================================================= */
+
+.sf-dashboard {
+  --sf-bg: #f5f7fb;
+  --sf-surface: #ffffff;
+  --sf-surface-2: #f8fafc;
+  --sf-text: #101828;
+  --sf-heading: #0b1220;
+  --sf-muted: #475467;
+  --sf-subtle: #667085;
+  --sf-border: #d9e1ec;
+  --sf-accent: #635bff;
+  --sf-accent-2: #8b5cf6;
+  --sf-success: #087443;
+  --sf-success-bg: #ecfdf3;
+  --sf-warning: #b54708;
+  --sf-warning-bg: #fffaeb;
+  --sf-danger: #b42318;
+  --sf-danger-bg: #fef3f2;
+  --sf-shadow: 0 18px 50px rgba(16, 24, 40, .08);
+  color: var(--sf-text);
+  background:
+    radial-gradient(circle at 8% 5%, rgba(99, 91, 255, .09), transparent 28%),
+    radial-gradient(circle at 92% 12%, rgba(139, 92, 246, .08), transparent 25%),
+    var(--sf-bg);
+  min-height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dark theme support regardless of which theme selector is active */
+.dark .sf-dashboard,
+body.dark .sf-dashboard,
+[data-theme="dark"] .sf-dashboard {
+  --sf-bg: #070b14;
+  --sf-surface: #101725;
+  --sf-surface-2: #151d2d;
+  --sf-text: #eef2ff;
+  --sf-heading: #ffffff;
+  --sf-muted: #c5cede;
+  --sf-subtle: #98a2b3;
+  --sf-border: #263247;
+  --sf-accent: #8b7cff;
+  --sf-accent-2: #a78bfa;
+  --sf-success: #6ce9a6;
+  --sf-success-bg: rgba(6, 118, 71, .16);
+  --sf-warning: #fec84b;
+  --sf-warning-bg: rgba(181, 71, 8, .16);
+  --sf-danger: #fda29b;
+  --sf-danger-bg: rgba(180, 35, 24, .16);
+  --sf-shadow: 0 20px 70px rgba(0, 0, 0, .30);
+}
+
+/* Ambient animated light */
+.sf-dashboard::before,
+.sf-dashboard::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  opacity: .12;
+  animation: sfFloat 12s ease-in-out infinite alternate;
+}
+
+.sf-dashboard::before {
+  top: -180px;
+  left: -120px;
+  background: #635bff;
+}
+
+.sf-dashboard::after {
+  right: -160px;
+  bottom: -180px;
+  background: #8b5cf6;
+  animation-delay: -5s;
+}
+
+.sf-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1320px;
+}
+
+/* Typography ? force readable contrast */
+.sf-dashboard h1,
+.sf-dashboard h2,
+.sf-dashboard h3,
+.sf-dashboard h4,
+.sf-dashboard strong {
+  color: var(--sf-heading) !important;
+}
+
+.sf-dashboard p,
+.sf-dashboard span,
+.sf-dashboard label {
+  color: var(--sf-text);
+}
+
+.sf-dashboard .sf-muted {
+  color: var(--sf-muted) !important;
+}
+
+.sf-dashboard .sf-subtle {
+  color: var(--sf-subtle) !important;
+}
+
+/* Hero */
+.sf-hero {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--sf-border);
+  background:
+    linear-gradient(135deg,
+      rgba(99, 91, 255, .13),
+      rgba(139, 92, 246, .07) 45%,
+      var(--sf-surface) 100%);
+  box-shadow: var(--sf-shadow);
+  border-radius: 28px;
+  padding: 38px;
+  animation: sfReveal .65s ease both;
+}
+
+.sf-hero::after {
+  content: "";
+  position: absolute;
+  width: 240px;
+  height: 240px;
+  right: -80px;
+  top: -100px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #635bff, #a78bfa);
+  opacity: .10;
+  filter: blur(5px);
+}
+
+.sf-kicker {
+  color: var(--sf-accent) !important;
+  font-weight: 800;
+  letter-spacing: .13em;
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+/* Readiness */
+.sf-readiness {
+  position: relative;
+  border: 1px solid var(--sf-border);
+  background: var(--sf-surface);
+  box-shadow: var(--sf-shadow);
+  border-radius: 24px;
+  transition: transform .25s ease, box-shadow .25s ease;
+  animation: sfReveal .75s ease both;
+}
+
+.sf-readiness:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 65px rgba(99, 91, 255, .15);
+}
+
+.sf-readiness h1,
+.sf-readiness h2 {
+  color: var(--sf-heading) !important;
+}
+
+/* Progress bars */
+.sf-progress-track {
+  background: #e4e7ec !important;
+  border: 1px solid var(--sf-border);
+  overflow: hidden;
+}
+
+.dark .sf-progress-track,
+body.dark .sf-progress-track,
+[data-theme="dark"] .sf-progress-track {
+  background: #202a3d !important;
+}
+
+.sf-progress-fill {
+  background: linear-gradient(90deg, #635bff, #8b5cf6, #a78bfa) !important;
+  background-size: 200% 100%;
+  animation: sfGradient 3s ease infinite;
+  box-shadow: 0 0 18px rgba(99, 91, 255, .35);
+}
+
+/* Panels */
+.sf-panel {
+  background: rgba(255, 255, 255, .88) !important;
+  border: 1px solid var(--sf-border) !important;
+  box-shadow: var(--sf-shadow);
+  border-radius: 22px !important;
+  color: var(--sf-text) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition:
+    transform .28s cubic-bezier(.2,.8,.2,1),
+    box-shadow .28s ease,
+    border-color .28s ease;
+  animation: sfReveal .7s ease both;
+}
+
+.dark .sf-panel,
+body.dark .sf-panel,
+[data-theme="dark"] .sf-panel {
+  background: rgba(16, 23, 37, .88) !important;
+}
+
+.sf-panel:hover {
+  transform: translateY(-3px);
+  border-color: rgba(99, 91, 255, .38) !important;
+  box-shadow:
+    0 22px 55px rgba(16, 24, 40, .12),
+    0 0 0 1px rgba(99, 91, 255, .04);
+}
+
+/* Skill cards */
+.sf-skill-grid {
+  gap: 16px !important;
+}
+
+.sf-skill-card {
+  position: relative;
+  overflow: hidden;
+  background: var(--sf-surface) !important;
+  border: 1px solid var(--sf-border) !important;
+  border-radius: 18px !important;
+  color: var(--sf-text) !important;
+  box-shadow: 0 8px 28px rgba(16, 24, 40, .055);
+  transition:
+    transform .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease;
+}
+
+.sf-skill-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(99, 91, 255, .07),
+    transparent 80%
+  );
+  transform: translateX(-100%);
+  transition: transform .6s ease;
+}
+
+.sf-skill-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  border-color: rgba(99, 91, 255, .45) !important;
+  box-shadow: 0 18px 40px rgba(99, 91, 255, .12);
+}
+
+.sf-skill-card:hover::before {
+  transform: translateX(100%);
+}
+
+.sf-skill-card h3,
+.sf-skill-card strong {
+  color: var(--sf-heading) !important;
+}
+
+/* Score numbers */
+.sf-dashboard .sf-score,
+.sf-dashboard .sf-percentage,
+.sf-dashboard .score {
+  color: var(--sf-heading) !important;
+  font-weight: 900;
+}
+
+/* Badges */
+.sf-badge {
+  border: 1px solid rgba(99, 91, 255, .22) !important;
+  background: rgba(99, 91, 255, .09) !important;
+  color: #5148d8 !important;
+  font-weight: 800;
+}
+
+.dark .sf-badge,
+body.dark .sf-badge,
+[data-theme="dark"] .sf-badge {
+  color: #b8b1ff !important;
+  background: rgba(139, 124, 255, .14) !important;
+}
+
+/* Status colors */
+.sf-dashboard .ready,
+.sf-dashboard .strong,
+.sf-dashboard [class*="ready"] {
+  color: var(--sf-success);
+}
+
+/* Two-column sections */
+.sf-two-column {
+  gap: 20px !important;
+}
+
+/* Gap list */
+.sf-gap-list > * {
+  border-color: var(--sf-border) !important;
+  color: var(--sf-text) !important;
+  transition: transform .2s ease, background .2s ease;
+}
+
+.sf-gap-list > *:hover {
+  transform: translateX(4px);
+  background: var(--sf-surface-2);
+}
+
+/* Score comparison */
+.sf-score-comparison {
+  background: var(--sf-surface-2) !important;
+  border: 1px solid var(--sf-border) !important;
+  border-radius: 18px !important;
+}
+
+.sf-score-comparison strong {
+  color: var(--sf-heading) !important;
+}
+
+/* Alignment */
+.sf-alignment-stats {
+  background: var(--sf-surface-2) !important;
+  border: 1px solid var(--sf-border) !important;
+  border-radius: 18px !important;
+}
+
+.sf-alignment-stats strong {
+  color: var(--sf-heading) !important;
+}
+
+/* Assessment performance */
+.sf-assessment-performance {
+  position: relative;
+  overflow: hidden;
+}
+
+.sf-assessment-performance::before {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  right: -80px;
+  top: -80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #635bff, #8b5cf6);
+  opacity: .09;
+}
+
+.sf-assessment-performance h2 {
+  color: var(--sf-heading) !important;
+  font-size: clamp(34px, 4vw, 48px) !important;
+  font-weight: 900 !important;
+}
+
+/* Explanation box */
+.sf-metric-explanation {
+  background: rgba(99, 91, 255, .06) !important;
+  border: 1px solid rgba(99, 91, 255, .15) !important;
+  color: var(--sf-muted) !important;
+  border-radius: 14px !important;
+}
+
+/* Next assessment */
+.sf-next-assessment {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg,
+      #635bff 0%,
+      #714cff 45%,
+      #8b5cf6 100%) !important;
+  border: 0 !important;
+  color: white !important;
+  box-shadow: 0 22px 55px rgba(99, 91, 255, .25);
+}
+
+.sf-next-assessment h2,
+.sf-next-assessment h3,
+.sf-next-assessment p,
+.sf-next-assessment span,
+.sf-next-assessment strong {
+  color: white !important;
+}
+
+.sf-next-assessment::after {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  right: -130px;
+  top: -150px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow:
+    0 0 0 35px rgba(255,255,255,.025),
+    0 0 0 70px rgba(255,255,255,.02);
+  animation: sfPulse 4s ease-in-out infinite;
+}
+
+/* Buttons */
+.sf-dashboard button {
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    background .2s ease !important;
+}
+
+.sf-dashboard button:hover {
+  transform: translateY(-2px);
+}
+
+.sf-dashboard button:active {
+  transform: translateY(0) scale(.98);
+}
+
+/* Empty/error/loading */
+.sf-empty,
+.sf-error,
+.sf-loading {
+  color: var(--sf-text) !important;
+  background: var(--sf-surface) !important;
+  border: 1px solid var(--sf-border) !important;
+  border-radius: 20px !important;
+}
+
+.sf-error {
+  color: var(--sf-danger) !important;
+  background: var(--sf-danger-bg) !important;
+}
+
+/* Loading shimmer */
+.sf-loading::after {
+  content: "";
+  display: block;
+  height: 4px;
+  margin-top: 16px;
+  border-radius: 99px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(99, 91, 255, .55),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: sfShimmer 1.4s linear infinite;
+}
+
+/* Stagger dashboard sections */
+.sf-dashboard .sf-panel:nth-child(1) { animation-delay: .05s; }
+.sf-dashboard .sf-panel:nth-child(2) { animation-delay: .10s; }
+.sf-dashboard .sf-panel:nth-child(3) { animation-delay: .15s; }
+.sf-dashboard .sf-panel:nth-child(4) { animation-delay: .20s; }
+.sf-dashboard .sf-panel:nth-child(5) { animation-delay: .25s; }
+.sf-dashboard .sf-panel:nth-child(6) { animation-delay: .30s; }
+
+/* Accessibility */
+.sf-dashboard button:focus-visible,
+.sf-dashboard a:focus-visible {
+  outline: 3px solid rgba(99, 91, 255, .35);
+  outline-offset: 3px;
+}
+
+/* Animations */
+@keyframes sfReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sfFloat {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(35px, 25px, 0) scale(1.08);
+  }
+}
+
+@keyframes sfGradient {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes sfShimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+@keyframes sfPulse {
+  0%, 100% {
+    transform: scale(.96);
+    opacity: .55;
+  }
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sf-dashboard *,
+  .sf-dashboard::before,
+  .sf-dashboard::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .sf-hero {
+    padding: 24px;
+    border-radius: 22px;
+  }
+
+  .sf-panel,
+  .sf-readiness {
+    border-radius: 18px !important;
+  }
+
+  .sf-two-column {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+/* =========================================================
+   ASSESSMENT FINAL ACTION ? HIGH CONTRAST
+   ========================================================= */
+
+.sf-dashboard button,
+.sf-dashboard .btn,
+.sf-dashboard [type="button"],
+.sf-dashboard [type="submit"] {
+  color: #ffffff !important;
+}
+
+/* Make assessment navigation buttons clearly visible */
+.sf-dashboard button:not(:disabled) {
+  background: #344054;
+  color: #ffffff !important;
+  border: 1px solid #344054;
+  font-weight: 700;
+}
+
+/* Final submit action */
+.sf-dashboard button[type="submit"],
+.sf-dashboard button.sf-submit,
+.sf-dashboard .submit-button {
+  background: linear-gradient(135deg, #635bff, #7c3aed) !important;
+  color: #ffffff !important;
+  border: 0 !important;
+  box-shadow: 0 8px 24px rgba(99, 91, 255, .28);
+  font-weight: 800 !important;
+}
+
+.sf-dashboard button[type="submit"]:hover,
+.sf-dashboard button.sf-submit:hover,
+.sf-dashboard .submit-button:hover {
+  background: linear-gradient(135deg, #5148e5, #6d28d9) !important;
+  color: #ffffff !important;
+  box-shadow: 0 12px 30px rgba(99, 91, 255, .38);
+  transform: translateY(-2px);
+}
+
+.sf-dashboard button:disabled {
+  background: #e4e7ec !important;
+  color: #98a2b3 !important;
+  border-color: #d0d5dd !important;
+  box-shadow: none !important;
+  cursor: not-allowed;
+}
+
+/* Assessment question navigation */
+.sf-dashboard button[aria-current="true"],
+.sf-dashboard .active {
+  background: #635bff !important;
+  color: #ffffff !important;
+  border-color: #635bff !important;
+}
+
+/* Light theme ? previous button */
+.sf-dashboard button {
+  text-shadow: none !important;
+}
+
+/* Dark theme */
+.dark .sf-dashboard button:not(:disabled),
+body.dark .sf-dashboard button:not(:disabled),
+[data-theme="dark"] .sf-dashboard button:not(:disabled) {
+  background: #263247;
+  color: #ffffff !important;
+  border-color: #344054;
+}
+
+.dark .sf-dashboard button[type="submit"],
+body.dark .sf-dashboard button[type="submit"],
+[data-theme="dark"] .sf-dashboard button[type="submit"] {
+  background: linear-gradient(135deg, #635bff, #8b5cf6) !important;
+  color: #ffffff !important;
+}
+
+
+/* =========================================================
+   SKILLFORGE AI ? PROFILE + THEME TOGGLE POLISH
+   ========================================================= */
+
+:root {
+  --profile-info-bg: #f0f4ff;
+  --profile-info-text: #172554;
+  --profile-info-muted: #475467;
+  --profile-muted: #667085;
+}
+
+/* Dark theme variables */
+.dark,
+body.dark,
+[data-theme="dark"] {
+  --profile-info-bg: #151e31;
+  --profile-info-text: #f5f7ff;
+  --profile-info-muted: #b8c1d1;
+  --profile-muted: #aab4c5;
+}
+
+/* ---------------------------------------------------------
+   PROFILE PAGE
+   --------------------------------------------------------- */
+
+.sf-profile,
+.profile-container,
+.profile-page {
+  color: var(--text-main, #101828);
+}
+
+/* Main profile card */
+.sf-profile > *,
+.profile-container > *,
+.profile-page > * {
+  color: var(--text-main, #101828);
+}
+
+/* Student information card ? force readable contrast */
+.sf-profile [style*="background"],
+.profile-container [style*="background"],
+.profile-page [style*="background"] {
+  color: var(--profile-info-text);
+}
+
+/* Student Info heading */
+.sf-profile [style*="background"] h1,
+.sf-profile [style*="background"] h2,
+.sf-profile [style*="background"] h3,
+.sf-profile [style*="background"] h4,
+.profile-container [style*="background"] h1,
+.profile-container [style*="background"] h2,
+.profile-container [style*="background"] h3,
+.profile-container [style*="background"] h4 {
+  color: var(--profile-info-text) !important;
+}
+
+/* Student email / secondary text */
+.sf-profile [style*="background"] p,
+.sf-profile [style*="background"] span,
+.profile-container [style*="background"] p,
+.profile-container [style*="background"] span {
+  color: var(--profile-info-muted) !important;
+}
+
+/* ---------------------------------------------------------
+   FORM LABELS
+   --------------------------------------------------------- */
+
+.sf-profile label,
+.profile-container label,
+.profile-page label {
+  color: var(--text-main, #101828) !important;
+  font-weight: 700 !important;
+}
+
+/* Helper text */
+.sf-profile small,
+.profile-container small,
+.profile-page small,
+.sf-profile .helper-text {
+  color: var(--profile-muted) !important;
+}
+
+/* ---------------------------------------------------------
+   SELECTS + INPUTS
+   --------------------------------------------------------- */
+
+.sf-profile input,
+.sf-profile select,
+.sf-profile textarea,
+.profile-container input,
+.profile-container select,
+.profile-container textarea,
+.profile-page input,
+.profile-page select,
+.profile-page textarea {
+  background: var(--surface, #ffffff) !important;
+  color: var(--text-main, #101828) !important;
+  border: 1px solid var(--border, #d0d5dd) !important;
+  border-radius: 12px !important;
+  min-height: 46px;
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease,
+    transform .2s ease,
+    background .2s ease;
+}
+
+.sf-profile input::placeholder,
+.profile-container input::placeholder,
+.profile-page input::placeholder {
+  color: #98a2b3 !important;
+  opacity: 1;
+}
+
+.sf-profile input:focus,
+.sf-profile select:focus,
+.sf-profile textarea:focus,
+.profile-container input:focus,
+.profile-container select:focus,
+.profile-container textarea:focus,
+.profile-page input:focus,
+.profile-page select:focus,
+.profile-page textarea:focus {
+  border-color: #635bff !important;
+  box-shadow: 0 0 0 4px rgba(99, 91, 255, .12) !important;
+  outline: none !important;
+}
+
+/* Dark inputs */
+.dark .sf-profile input,
+.dark .sf-profile select,
+.dark .sf-profile textarea,
+body.dark .sf-profile input,
+body.dark .sf-profile select,
+body.dark .sf-profile textarea,
+[data-theme="dark"] .sf-profile input,
+[data-theme="dark"] .sf-profile select,
+[data-theme="dark"] .sf-profile textarea {
+  background: #101827 !important;
+  color: #f5f7ff !important;
+  border-color: #344054 !important;
+}
+
+/* ---------------------------------------------------------
+   SAVE BUTTON
+   --------------------------------------------------------- */
+
+.sf-profile button,
+.profile-container button,
+.profile-page button {
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    filter .2s ease !important;
+}
+
+.sf-profile button:hover,
+.profile-container button:hover,
+.profile-page button:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.03);
+}
+
+.sf-profile button:active,
+.profile-container button:active,
+.profile-page button:active {
+  transform: translateY(0) scale(.98);
+}
+
+/* Primary save action */
+.sf-profile button[type="submit"],
+.profile-container button[type="submit"],
+.profile-page button[type="submit"] {
+  background: linear-gradient(135deg, #635bff, #7c3aed) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 10px 25px rgba(99, 91, 255, .25);
+  font-weight: 800 !important;
+}
+
+.sf-profile button[type="submit"]:hover,
+.profile-container button[type="submit"]:hover,
+.profile-page button[type="submit"]:hover {
+  box-shadow: 0 14px 32px rgba(99, 91, 255, .35);
+}
+
+/* ---------------------------------------------------------
+   HEADER THEME TOGGLE
+   --------------------------------------------------------- */
+
+/* Target common theme toggle implementations */
+.theme-toggle,
+.theme-button,
+[data-theme-toggle],
+button[aria-label*="theme" i],
+button[title*="theme" i] {
+  position: relative;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 48px !important;
+  height: 38px !important;
+  min-width: 48px !important;
+  padding: 0 !important;
+  border-radius: 999px !important;
+  background: #ffffff !important;
+  border: 1px solid #d0d5dd !important;
+  color: #344054 !important;
+  box-shadow: 0 4px 14px rgba(16, 24, 40, .08);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.theme-toggle:hover,
+.theme-button:hover,
+[data-theme-toggle]:hover,
+button[aria-label*="theme" i]:hover,
+button[title*="theme" i]:hover {
+  border-color: #635bff !important;
+  color: #5148d8 !important;
+  box-shadow: 0 7px 20px rgba(99, 91, 255, .18);
+  transform: translateY(-2px);
+}
+
+/* Theme icon */
+.theme-toggle svg,
+.theme-button svg,
+[data-theme-toggle] svg {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* Dark theme toggle */
+.dark .theme-toggle,
+.dark .theme-button,
+.dark [data-theme-toggle],
+body.dark .theme-toggle,
+body.dark .theme-button,
+body.dark [data-theme-toggle],
+[data-theme="dark"] .theme-toggle,
+[data-theme="dark"] .theme-button,
+[data-theme="dark"] [data-theme-toggle] {
+  background: #151e31 !important;
+  border-color: #344054 !important;
+  color: #f5f7ff !important;
+}
+
+/* ---------------------------------------------------------
+   PROFILE ANIMATION
+   --------------------------------------------------------- */
+
+.sf-profile,
+.profile-container,
+.profile-page {
+  animation: sfProfileEnter .55s cubic-bezier(.2,.8,.2,1) both;
+}
+
+@keyframes sfProfileEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form fields enter gently */
+.sf-profile input,
+.sf-profile select,
+.sf-profile textarea {
+  animation: sfFieldEnter .45s ease both;
+}
+
+.sf-profile select:nth-of-type(1) {
+  animation-delay: .04s;
+}
+
+.sf-profile select:nth-of-type(2) {
+  animation-delay: .08s;
+}
+
+.sf-profile input {
+  animation-delay: .12s;
+}
+
+/* Prevent text from ever becoming invisible */
+.sf-profile,
+.profile-container,
+.profile-page {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@keyframes sfFieldEnter {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .theme-toggle,
+  .theme-button,
+  [data-theme-toggle] {
+    width: 42px !important;
+    min-width: 42px !important;
+    height: 36px !important;
+  }
+}
+
+
+/* =========================================================
+   FINAL HEADER / THEME CONTROL
+   ========================================================= */
+
+.sf-theme-toggle {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  padding: 0 !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: 50% !important;
+
+  background: #ffffff !important;
+  color: #344054 !important;
+
+  border: 1px solid #d0d5dd !important;
+
+  font-size: 20px !important;
+  line-height: 1 !important;
+
+  box-shadow:
+    0 4px 12px rgba(16,24,40,.08),
+    inset 0 1px 0 rgba(255,255,255,.8);
+
+  cursor: pointer;
+
+  transition:
+    transform .25s cubic-bezier(.2,.8,.2,1),
+    background .25s ease,
+    color .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease;
+
+  overflow: hidden !important;
+  white-space: nowrap !important;
+}
+
+.sf-theme-toggle:hover {
+  transform: translateY(-2px) rotate(8deg) !important;
+
+  background: #f5f3ff !important;
+  color: #635bff !important;
+
+  border-color: #8b7cff !important;
+
+  box-shadow:
+    0 8px 22px rgba(99,91,255,.18),
+    0 0 0 4px rgba(99,91,255,.07);
+}
+
+.sf-theme-toggle:active {
+  transform: scale(.92) !important;
+}
+
+/* Dark mode */
+.dark .sf-theme-toggle,
+body.dark .sf-theme-toggle,
+[data-theme="dark"] .sf-theme-toggle {
+  background: #151e31 !important;
+  color: #f8fafc !important;
+  border-color: #344054 !important;
+
+  box-shadow:
+    0 6px 20px rgba(0,0,0,.3),
+    inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+.dark .sf-theme-toggle:hover,
+body.dark .sf-theme-toggle:hover,
+[data-theme="dark"] .sf-theme-toggle:hover {
+  background: #202a3d !important;
+  color: #a78bfa !important;
+  border-color: #635bff !important;
+}
+
+/* Remove ugly browser tooltip-looking custom styling */
+.sf-theme-toggle::after {
+  display: none !important;
+}
+
+
+/* =========================================================
+   FINAL ASSESSMENT PAGE HEADER
+   ========================================================= */
+
+.sf-assessment-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 28px;
+
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.sf-assessment-header-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.sf-assessment-header-content h1 {
+  margin: 0 !important;
+  color: var(--text-main, #101828) !important;
+
+  font-size: clamp(26px, 3vw, 34px) !important;
+  font-weight: 850 !important;
+  letter-spacing: -.035em;
+  line-height: 1.15 !important;
+}
+
+.sf-assessment-header-content p {
+  margin: 7px 0 0 !important;
+  color: var(--text-secondary, #667085) !important;
+
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  max-width: 760px;
+}
+
+.sf-assessment-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+
+/* =========================================================
+   ASSESSMENT HEADER BUTTONS
+   ========================================================= */
+
+.sf-assessment-header-actions button {
+  min-height: 44px !important;
+  padding: 10px 18px !important;
+
+  border-radius: 12px !important;
+
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+
+  white-space: nowrap !important;
+
+  cursor: pointer;
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    background .2s ease,
+    border-color .2s ease !important;
+}
+
+.sf-assessment-header-actions button:first-child {
+  background: linear-gradient(
+    135deg,
+    #635bff,
+    #7c3aed
+  ) !important;
+
+  color: #ffffff !important;
+  border: 0 !important;
+
+  box-shadow:
+    0 8px 22px rgba(99,91,255,.24);
+}
+
+.sf-assessment-header-actions button:first-child:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 30px rgba(99,91,255,.34);
+}
+
+.sf-assessment-header-actions button:last-child {
+  background: #ffffff !important;
+  color: #344054 !important;
+
+  border: 1px solid #d0d5dd !important;
+
+  box-shadow: 0 4px 12px rgba(16,24,40,.05);
+}
+
+.sf-assessment-header-actions button:last-child:hover {
+  transform: translateY(-2px);
+
+  background: #f5f3ff !important;
+  color: #5148d8 !important;
+
+  border-color: #8b7cff !important;
+
+  box-shadow:
+    0 8px 20px rgba(99,91,255,.12);
+}
+
+
+/* Dark assessment header */
+.dark .sf-assessment-header-content h1,
+body.dark .sf-assessment-header-content h1,
+[data-theme="dark"] .sf-assessment-header-content h1 {
+  color: #f8fafc !important;
+}
+
+.dark .sf-assessment-header-content p,
+body.dark .sf-assessment-header-content p,
+[data-theme="dark"] .sf-assessment-header-content p {
+  color: #aab4c5 !important;
+}
+
+.dark .sf-assessment-header-actions button:last-child,
+body.dark .sf-assessment-header-actions button:last-child,
+[data-theme="dark"] .sf-assessment-header-actions button:last-child {
+  background: #151e31 !important;
+  color: #eef2ff !important;
+  border-color: #344054 !important;
+}
+
+.dark .sf-assessment-header-actions button:last-child:hover,
+body.dark .sf-assessment-header-actions button:last-child:hover,
+[data-theme="dark"] .sf-assessment-header-actions button:last-child:hover {
+  background: #202a3d !important;
+  color: #b8b1ff !important;
+  border-color: #635bff !important;
+}
+
+
+/* =========================================================
+   BETTER ASSESSMENT CONTAINER
+   ========================================================= */
+
+.sf-assessment-card {
+  background: #ffffff !important;
+
+  border: 1px solid #e4e7ec !important;
+
+  border-radius: 24px !important;
+
+  box-shadow:
+    0 18px 55px rgba(16,24,40,.08);
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+.sf-assessment-card:hover {
+  box-shadow:
+    0 25px 70px rgba(16,24,40,.11);
+}
+
+.dark .sf-assessment-card,
+body.dark .sf-assessment-card,
+[data-theme="dark"] .sf-assessment-card {
+  background: #101725 !important;
+  border-color: #263247 !important;
+
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.32);
+}
+
+
+/* =========================================================
+   RESPONSIVE HEADER
+   ========================================================= */
+
+@media (max-width: 900px) {
+
+  .sf-assessment-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .sf-assessment-header-actions {
+    width: 100%;
+  }
+
+  .sf-assessment-header-actions button {
+    flex: 1;
+  }
+}
+
+@media (max-width: 520px) {
+
+  .sf-assessment-header-content h1 {
+    font-size: 24px !important;
+  }
+
+  .sf-assessment-header-actions {
+    flex-direction: column;
+  }
+
+  .sf-assessment-header-actions button {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   FINAL SUBMIT BUTTON ? BLACK
+   ========================================================= */
+
+.sf-submit-assessment {
+  background: #101828 !important;
+  color: #ffffff !important;
+
+  border: 1px solid #101828 !important;
+  border-radius: 12px !important;
+
+  min-height: 46px !important;
+  padding: 11px 24px !important;
+
+  font-size: 14px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+
+  cursor: pointer !important;
+
+  box-shadow:
+    0 8px 20px rgba(16, 24, 40, .20) !important;
+
+  transition:
+    background .2s ease,
+    transform .2s ease,
+    box-shadow .2s ease !important;
+}
+
+.sf-submit-assessment:hover:not(:disabled) {
+  background: #000000 !important;
+  color: #ffffff !important;
+
+  transform: translateY(-2px) !important;
+
+  box-shadow:
+    0 12px 28px rgba(16, 24, 40, .30) !important;
+}
+
+.sf-submit-assessment:active:not(:disabled) {
+  transform: translateY(0) scale(.98) !important;
+}
+
+.sf-submit-assessment:disabled {
+  background: #d0d5dd !important;
+  color: #667085 !important;
+  border-color: #d0d5dd !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+}
+
+/* Dark mode ? still black, but slightly lifted from the page */
+.dark .sf-submit-assessment:not(:disabled),
+body.dark .sf-submit-assessment:not(:disabled),
+[data-theme="dark"] .sf-submit-assessment:not(:disabled) {
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #475467 !important;
+}
+
+.dark .sf-submit-assessment:hover:not(:disabled),
+body.dark .sf-submit-assessment:hover:not(:disabled),
+[data-theme="dark"] .sf-submit-assessment:hover:not(:disabled) {
+  background: #1d2430 !important;
+  border-color: #667085 !important;
+}
+
+
+/* =========================================================
+   SKILLFORGE ? FINAL SUN / MOON THEME CONTROL
+   ========================================================= */
+
+/* Target the existing theme button without changing its logic */
+button[title="Switch theme"],
+button[title*="Switch theme" i],
+button[aria-label="Switch theme"],
+button[aria-label*="Switch theme" i] {
+  position: relative !important;
+
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: 50% !important;
+
+  background: #ffffff !important;
+  color: #344054 !important;
+
+  border: 1px solid #d0d5dd !important;
+
+  box-shadow:
+    0 4px 12px rgba(16, 24, 40, .08);
+
+  overflow: hidden !important;
+  white-space: nowrap !important;
+
+  font-size: 0 !important;
+  line-height: 0 !important;
+
+  cursor: pointer !important;
+
+  transition:
+    transform .3s cubic-bezier(.2,.8,.2,1),
+    background .3s ease,
+    border-color .3s ease,
+    box-shadow .3s ease !important;
+}
+
+/* Remove old text/emoji */
+button[title="Switch theme"]::before,
+button[title*="Switch theme" i]::before,
+button[aria-label="Switch theme"]::before,
+button[aria-label*="Switch theme" i]::before {
+  content: "" !important;
+
+  width: 20px !important;
+  height: 20px !important;
+
+  display: block !important;
+
+  background-color: currentColor !important;
+
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='4'/%3E%3Cpath d='M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42'/%3E%3C/svg%3E");
+
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-position: center;
+  mask-position: center;
+
+  -webkit-mask-size: contain;
+  mask-size: contain;
+
+  transition:
+    transform .35s cubic-bezier(.2,.8,.2,1),
+    opacity .25s ease;
+}
+
+/* Hover */
+button[title="Switch theme"]:hover,
+button[title*="Switch theme" i]:hover,
+button[aria-label="Switch theme"]:hover,
+button[aria-label*="Switch theme" i]:hover {
+  transform: translateY(-2px) !important;
+
+  background: #f5f3ff !important;
+  color: #635bff !important;
+
+  border-color: #8b7cff !important;
+
+  box-shadow:
+    0 8px 22px rgba(99, 91, 255, .18),
+    0 0 0 4px rgba(99, 91, 255, .06) !important;
+}
+
+button[title="Switch theme"]:hover::before,
+button[title*="Switch theme" i]:hover::before,
+button[aria-label="Switch theme"]:hover::before,
+button[aria-label*="Switch theme" i]:hover::before {
+  transform: rotate(25deg) scale(1.08);
+}
+
+/* Click */
+button[title="Switch theme"]:active,
+button[title*="Switch theme" i]:active,
+button[aria-label="Switch theme"]:active,
+button[aria-label*="Switch theme" i]:active {
+  transform: scale(.9) !important;
+}
+
+/* =========================================================
+   DARK MODE ? MOON
+   ========================================================= */
+
+.dark button[title="Switch theme"],
+body.dark button[title="Switch theme"],
+[data-theme="dark"] button[title="Switch theme"],
+.dark button[title*="Switch theme" i],
+body.dark button[title*="Switch theme" i],
+[data-theme="dark"] button[title*="Switch theme" i],
+.dark button[aria-label*="Switch theme" i],
+body.dark button[aria-label*="Switch theme" i],
+[data-theme="dark"] button[aria-label*="Switch theme" i] {
+  background: #151e31 !important;
+  color: #f8fafc !important;
+
+  border-color: #344054 !important;
+
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, .28) !important;
+}
+
+/* Moon icon in dark mode */
+.dark button[title="Switch theme"]::before,
+body.dark button[title="Switch theme"]::before,
+[data-theme="dark"] button[title="Switch theme"]::before,
+.dark button[title*="Switch theme" i]::before,
+body.dark button[title*="Switch theme" i]::before,
+[data-theme="dark"] button[title*="Switch theme" i]::before,
+.dark button[aria-label*="Switch theme" i]::before,
+body.dark button[aria-label*="Switch theme" i]::before,
+[data-theme="dark"] button[aria-label*="Switch theme" i]::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z'/%3E%3C/svg%3E");
+}
+
+/* Dark hover */
+.dark button[title="Switch theme"]:hover,
+body.dark button[title="Switch theme"]:hover,
+[data-theme="dark"] button[title="Switch theme"]:hover,
+.dark button[title*="Switch theme" i]:hover,
+body.dark button[title*="Switch theme" i]:hover,
+[data-theme="dark"] button[title*="Switch theme" i]:hover {
+  background: #202a3d !important;
+  color: #a78bfa !important;
+  border-color: #635bff !important;
+}
+
+/* Tooltip */
+button[title="Switch theme"],
+button[title*="Switch theme" i] {
+  --theme-tooltip: "Switch theme";
+}
+
+/* Keep button from being squeezed by header */
+header button[title*="Switch theme" i],
+nav button[title*="Switch theme" i] {
+  flex: 0 0 44px !important;
+}
+
+@media (max-width: 700px) {
+  button[title*="Switch theme" i],
+  button[aria-label*="Switch theme" i] {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+  }
+}
+
+
+/* =========================================================
+   SKILLFORGE ? FLOATING BOTTOM THEME CONTROL
+   ========================================================= */
+
+.sf-floating-theme-toggle {
+  position: fixed !important;
+
+  right: 26px !important;
+  bottom: 26px !important;
+
+  z-index: 9999 !important;
+
+  width: 52px !important;
+  height: 52px !important;
+  min-width: 52px !important;
+  min-height: 52px !important;
+
+  padding: 0 !important;
+  margin: 0 !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: 50% !important;
+
+  background: #ffffff !important;
+  color: #344054 !important;
+
+  border: 1px solid #d0d5dd !important;
+
+  box-shadow:
+    0 10px 30px rgba(16, 24, 40, .16),
+    0 2px 8px rgba(16, 24, 40, .08) !important;
+
+  cursor: pointer !important;
+
+  font-size: 0 !important;
+  line-height: 0 !important;
+
+  transition:
+    transform .3s cubic-bezier(.2,.8,.2,1),
+    background .25s ease,
+    color .25s ease,
+    border-color .25s ease,
+    box-shadow .25s ease !important;
+}
+
+.sf-floating-theme-toggle svg {
+  width: 22px !important;
+  height: 22px !important;
+
+  display: block !important;
+
+  color: currentColor !important;
+
+  transition:
+    transform .35s cubic-bezier(.2,.8,.2,1) !important;
+}
+
+.sf-floating-theme-toggle:hover {
+  transform: translateY(-4px) scale(1.05) !important;
+
+  background: #f5f3ff !important;
+  color: #635bff !important;
+
+  border-color: #8b7cff !important;
+
+  box-shadow:
+    0 16px 35px rgba(99, 91, 255, .22),
+    0 0 0 5px rgba(99, 91, 255, .07) !important;
+}
+
+.sf-floating-theme-toggle:hover svg {
+  transform: rotate(18deg) scale(1.08);
+}
+
+.sf-floating-theme-toggle:active {
+  transform: translateY(-1px) scale(.94) !important;
+}
+
+/* Dark mode */
+[data-theme="dark"] .sf-floating-theme-toggle,
+.dark .sf-floating-theme-toggle,
+body.dark .sf-floating-theme-toggle {
+  background: #111827 !important;
+  color: #f8fafc !important;
+
+  border-color: #344054 !important;
+
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, .35) !important;
+}
+
+[data-theme="dark"] .sf-floating-theme-toggle:hover,
+.dark .sf-floating-theme-toggle:hover,
+body.dark .sf-floating-theme-toggle:hover {
+  background: #202a3d !important;
+  color: #a78bfa !important;
+
+  border-color: #635bff !important;
+
+  box-shadow:
+    0 16px 35px rgba(99, 91, 255, .25),
+    0 0 0 5px rgba(99, 91, 255, .10) !important;
+}
+
+/* Small screens */
+@media (max-width: 600px) {
+  .sf-floating-theme-toggle {
+    right: 16px !important;
+    bottom: 16px !important;
+
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    min-height: 46px !important;
+  }
+
+  .sf-floating-theme-toggle svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
+
+
+/* =========================================================
+   SKILLFORGE ? FULL WIDTH APPLICATION LAYOUT
+   ========================================================= */
+
+/* Main dashboard uses the available browser width */
+.sf-dashboard {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: calc(100vh - 70px);
+  box-sizing: border-box;
+}
+
+/* Wide centered content ? not a narrow card */
+.sf-dashboard .sf-container {
+  width: calc(100% - 64px) !important;
+  max-width: 1440px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box;
+}
+
+/* Make major dashboard panels use the available width */
+.sf-dashboard .sf-hero,
+.sf-dashboard .sf-panel,
+.sf-dashboard .sf-next-assessment,
+.sf-dashboard .sf-error,
+.sf-dashboard .sf-loading,
+.sf-dashboard .sf-empty {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Hero gets proper full-width proportions */
+.sf-dashboard .sf-hero {
+  min-height: 300px;
+}
+
+/* Skill cards get more breathing room */
+.sf-dashboard .sf-skill-grid {
+  width: 100% !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+/* Two-column sections use the wider viewport */
+.sf-dashboard .sf-two-column {
+  width: 100% !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+/* Alignment / analysis sections */
+.sf-dashboard .sf-alignment-stats {
+  width: 100%;
+}
+
+/* Keep text readable instead of stretching endlessly */
+.sf-dashboard .sf-hero h1,
+.sf-dashboard .sf-panel > h2,
+.sf-dashboard .sf-panel > h3 {
+  max-width: 900px;
+}
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1500px) {
+  .sf-dashboard .sf-container {
+    width: calc(100% - 96px) !important;
+    max-width: 1480px !important;
+  }
+}
+
+/* =========================================================
+   LAPTOP
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  .sf-dashboard .sf-container {
+    width: calc(100% - 40px) !important;
+  }
+
+  .sf-dashboard .sf-skill-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .sf-dashboard .sf-container {
+    width: calc(100% - 24px) !important;
+  }
+
+  .sf-dashboard .sf-skill-grid,
+  .sf-dashboard .sf-two-column {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sf-dashboard .sf-hero {
+    min-height: auto;
+  }
+}
+
+
+/* =========================================================
+   SKILLFORGE ? GLOBAL FULL-WIDTH APP CONTENT
+   Final layout override
+   ========================================================= */
+
+/* Main application page containers */
+main,
+#root {
+  width: 100%;
+  min-width: 0;
+}
+
+/* Common centered application wrappers */
+.sf-container,
+.sf-page,
+.sf-main,
+.page-container,
+.page-content,
+.content-container,
+.app-container {
+  width: calc(100% - 80px) !important;
+  max-width: 1480px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Assessment and profile page content */
+.sf-assessment,
+.sf-profile,
+.assessment-page,
+.profile-page {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+/* Any direct page wrapper using common max-widths */
+.sf-assessment-container,
+.sf-profile-container,
+.assessment-container,
+.profile-container {
+  width: 100% !important;
+  max-width: 1480px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Large desktop */
+@media (min-width: 1400px) {
+  .sf-container,
+  .sf-page,
+  .sf-main,
+  .page-container,
+  .page-content,
+  .content-container,
+  .app-container {
+    width: calc(100% - 100px) !important;
+    max-width: 1480px !important;
+  }
+}
+
+/* Laptop */
+@media (max-width: 1100px) {
+  .sf-container,
+  .sf-page,
+  .sf-main,
+  .page-container,
+  .page-content,
+  .content-container,
+  .app-container {
+    width: calc(100% - 48px) !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+  .sf-container,
+  .sf-page,
+  .sf-main,
+  .page-container,
+  .page-content,
+  .content-container,
+  .app-container {
+    width: calc(100% - 24px) !important;
+  }
+}
+
+
+/* =========================================================
+   SKILLFORGE ? TRUE FULL-SCREEN APPLICATION
+   ========================================================= */
+
+html,
+body,
+#root {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body {
+  overflow-x: hidden !important;
+}
+
+/* Main application */
+#root > div {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Main page areas */
+main {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+/* =========================================================
+   REMOVE OLD CENTERED WIDTH LIMITS
+   ========================================================= */
+
+.sf-dashboard,
+.sf-assessment,
+.sf-profile,
+.sf-system,
+.sf-container,
+.sf-page,
+.sf-main,
+.page-container,
+.page-content,
+.content-container,
+.app-container,
+.assessment-page,
+.profile-page,
+.assessment-container,
+.profile-container,
+.sf-assessment-container,
+.sf-profile-container {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* =========================================================
+   FULL WIDTH PAGE INNER SPACING
+   ========================================================= */
+
+.sf-dashboard .sf-container,
+.sf-assessment .sf-container,
+.sf-profile .sf-container {
+  padding-left: 48px !important;
+  padding-right: 48px !important;
+}
+
+/* Assessment/profile main content */
+.sf-assessment-container,
+.sf-profile-container,
+.assessment-container,
+.profile-container {
+  padding-left: 48px !important;
+  padding-right: 48px !important;
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.sf-dashboard {
+  min-height: calc(100vh - 70px) !important;
+}
+
+.sf-dashboard .sf-container {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+/* Dashboard sections stretch across screen */
+.sf-dashboard .sf-hero,
+.sf-dashboard .sf-panel,
+.sf-dashboard .sf-next-assessment,
+.sf-dashboard .sf-error,
+.sf-dashboard .sf-loading,
+.sf-dashboard .sf-empty {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* =========================================================
+   ASSESSMENT
+   ========================================================= */
+
+.sf-assessment {
+  min-height: calc(100vh - 70px) !important;
+  padding-left: 48px !important;
+  padding-right: 48px !important;
+  box-sizing: border-box !important;
+}
+
+/* Assessment cards use full available width */
+.sf-assessment > *,
+.sf-assessment-container > * {
+  max-width: none !important;
+}
+
+/* Question card */
+.sf-assessment .assessment-card,
+.sf-assessment .question-card {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+/* =========================================================
+   PROFILE
+   ========================================================= */
+
+.sf-profile {
+  width: 100% !important;
+  min-height: calc(100vh - 70px) !important;
+
+  padding-left: 48px !important;
+  padding-right: 48px !important;
+
+  box-sizing: border-box !important;
+}
+
+.sf-profile > *,
+.sf-profile-container > * {
+  max-width: none !important;
+}
+
+/* Profile form */
+.sf-profile form,
+.sf-profile .profile-card {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+/* =========================================================
+   HEADER ? FULL WIDTH
+   ========================================================= */
+
+header,
+.sf-header,
+.sf-navbar,
+nav {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+/* =========================================================
+   FOOTER ? FULL WIDTH
+   ========================================================= */
+
+footer,
+.sf-footer {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+/* =========================================================
+   WIDE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1400px) {
+
+  .sf-dashboard .sf-container,
+  .sf-assessment,
+  .sf-profile {
+    padding-left: 64px !important;
+    padding-right: 64px !important;
+  }
+
+}
+
+/* =========================================================
+   LAPTOP
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .sf-dashboard .sf-container,
+  .sf-assessment,
+  .sf-profile {
+    padding-left: 32px !important;
+    padding-right: 32px !important;
+  }
+
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+  .sf-dashboard .sf-container,
+  .sf-assessment,
+  .sf-profile {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+}
+
+
+/* =========================================================
+   SKILLFORGE ? TRUE FULL-BROWSER APP SHELL
+   ========================================================= */
+
+/* Browser */
+html,
+body,
+#root {
+  width: 100% !important;
+  min-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   HEADER ? BACKGROUND AND INNER ROW FULL WIDTH
+   ========================================================= */
+
+header,
+.sf-header {
+  width: 100vw !important;
+  max-width: none !important;
+  min-width: 100% !important;
+
+  margin: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+header > div,
+.sf-header > div,
+.sf-header-inner {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Header content spacing */
+header > div {
+  padding-left: 48px !important;
+  padding-right: 48px !important;
+}
+
+/* =========================================================
+   NAVIGATION ? USE AVAILABLE WIDTH
+   ========================================================= */
+
+header nav,
+.sf-header nav,
+.sf-navbar {
+  width: auto !important;
+  max-width: none !important;
+  flex: 1 1 auto !important;
+}
+
+/* =========================================================
+   MAIN ? FULL VIEWPORT
+   ========================================================= */
+
+main {
+  width: 100vw !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+/* Main direct wrapper */
+main > div {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+/* =========================================================
+   ASSESSMENT PAGE
+   ========================================================= */
+
+.sf-assessment,
+.assessment-page {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+  padding-left: 48px !important;
+  padding-right: 48px !important;
+
+  box-sizing: border-box !important;
+}
+
+/* Remove old assessment max-width */
+.sf-assessment > div,
+.assessment-page > div,
+.sf-assessment-container {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* =========================================================
+   PROFILE PAGE
+   ========================================================= */
+
+.sf-profile,
+.profile-page {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+  padding-left: 48px !important;
+  padding-right: 48px !important;
+
+  box-sizing: border-box !important;
+}
+
+.sf-profile > div,
+.profile-page > div,
+.sf-profile-container {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.sf-dashboard {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.sf-dashboard .sf-container {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin: 0 !important;
+  padding-left: 48px !important;
+  padding-right: 48px !important;
+}
+
+/* =========================================================
+   FOOTER ? ACTUALLY FULL WIDTH
+   ========================================================= */
+
+footer,
+.sf-footer {
+  width: 100vw !important;
+  max-width: none !important;
+  min-width: 100% !important;
+
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+
+  box-sizing: border-box !important;
+}
+
+/* Remove the narrow footer container */
+footer > div,
+.sf-footer > div,
+.sf-footer-inner {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+
+  padding-left: 48px !important;
+  padding-right: 48px !important;
+
+  box-sizing: border-box !important;
+}
+
+/* =========================================================
+   WIDE SCREENS
+   ========================================================= */
+
+@media (min-width: 1400px) {
+  header > div,
+  footer > div,
+  .sf-footer-inner {
+    padding-left: 64px !important;
+    padding-right: 64px !important;
+  }
+
+  .sf-assessment,
+  .assessment-page,
+  .sf-profile,
+  .profile-page,
+  .sf-dashboard .sf-container {
+    padding-left: 64px !important;
+    padding-right: 64px !important;
+  }
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+  header > div,
+  footer > div,
+  .sf-footer-inner {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+
+  .sf-assessment,
+  .assessment-page,
+  .sf-profile,
+  .profile-page,
+  .sf-dashboard .sf-container {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  header > div,
+  footer > div,
+  .sf-footer-inner {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .sf-assessment,
+  .assessment-page,
+  .sf-profile,
+  .profile-page,
+  .sf-dashboard .sf-container {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}

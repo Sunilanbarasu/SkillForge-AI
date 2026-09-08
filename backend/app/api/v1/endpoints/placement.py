@@ -7,6 +7,7 @@ from app.models.user import User
 from app.models.assessment import Assessment, SkillScore
 from app.models.profile import Profile
 
+from app.services.role_profiles import get_all_careers
 from app.services.placement_alignment import (
     build_placement_alignment,
     ROLE_REQUIREMENTS,
@@ -64,10 +65,13 @@ def get_placement_alignment(
         .first()
     )
 
+    # The assessment that produced these scores is the source of truth.
+    # This prevents an older profile/alignment role from mismatching
+    # the latest assessment.
     target_role = (
-        profile.target_role
-        if profile and profile.target_role
-        else "Software Developer"
+        assessment.target_role
+        or (profile.target_role if profile and profile.target_role else None)
+        or "Software Engineer"
     )
 
     # ---------------------------------------------------------
@@ -120,9 +124,7 @@ def get_placement_alignment(
         2,
     )
 
-    alignment["available_roles"] = list(
-        ROLE_REQUIREMENTS.keys()
-    )
+    alignment["available_roles"] = get_all_careers()
 
     return alignment
 

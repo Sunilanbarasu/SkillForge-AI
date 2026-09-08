@@ -218,10 +218,7 @@ export function Assessment() {
             </button>
             <button
               onClick={loadHistory}
-              className="btn"
-              style={{ backgroundColor: viewState === 'history' ? '#334155' : 'transparent', color: '#fff' }}
-            >
-              Assessment History
+              className="btn sf-assessment-history">Assessment History
             </button>
           </div>
         )}
@@ -244,31 +241,166 @@ export function Assessment() {
       {/* VIEW 1: START SCREEN */}
       {viewState === 'start' && (
         <div className="card" style={{ padding: '2rem' }}>
-          <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: 'var(--text-main)', marginBottom: '1rem' }}>
-            Placement Readiness Diagnostic Test
+
+          <h3 style={{
+            fontSize: '1.25rem',
+            fontWeight: 600,
+            color: 'var(--text)',
+            marginBottom: '0.75rem'
+          }}>
+            {targetRole
+              ? `${targetRole} Placement Assessment`
+              : 'Placement Assessment'}
           </h3>
-          <p style={{ color: 'var(--text-muted)', lineHeight: '1.6', marginBottom: '1.5rem' }}>
-            This placement test evaluates your skills across 35 curated computer science and aptitude questions. 
-            Once completed, your scores are calculated server-side and interpreted by SkillForge AI to map your skill gaps.
+
+          <p style={{
+            color: 'var(--text-secondary)',
+            lineHeight: '1.6',
+            marginBottom: '1.5rem'
+          }}>
+            This assessment is personalized for your target profession
+            and evaluates the skills most relevant to your placement goal.
+            SkillForge AI adapts the assessment to your career profile.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
-            {["Python", "C", "DSA", "SQL", "OOP", "DBMS", "Aptitude"].map(skill => (
-              <div key={skill} style={{ backgroundColor: '#0f172a', padding: '1rem', borderRadius: '8px', border: '1px solid #334155' }}>
-                <div style={{ fontWeight: 600, color: 'var(--accent-primary)', fontSize: '0.9375rem' }}>{skill}</div>
-                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>5 Diagnostic Questions</div>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1rem',
+            marginBottom: '1.5rem'
+          }}>
+
+            <div style={{
+              backgroundColor: 'var(--surface-soft)',
+              padding: '1.1rem',
+              borderRadius: '10px',
+              border: '1px solid var(--border)'
+            }}>
+              <div style={{
+                fontSize: '0.75rem',
+                color: 'var(--text-muted)',
+                marginBottom: '0.35rem'
+              }}>
+                Target Profession
               </div>
-            ))}
+
+              <div style={{
+                fontWeight: 700,
+                color: 'var(--text)'
+              }}>
+                {targetRole || 'Your target career'}
+              </div>
+            </div>
+
+            <div style={{
+              backgroundColor: 'var(--surface-soft)',
+              padding: '1.1rem',
+              borderRadius: '10px',
+              border: '1px solid var(--border)'
+            }}>
+              <div style={{
+                fontSize: '0.75rem',
+                color: 'var(--text-muted)',
+                marginBottom: '0.35rem'
+              }}>
+                Difficulty
+              </div>
+
+              <div style={{
+                fontWeight: 700,
+                color: 'var(--text)'
+              }}>
+                {assessmentDifficulty || 'Adaptive'}
+              </div>
+            </div>
+
+            <div style={{
+              backgroundColor: 'var(--surface-soft)',
+              padding: '1.1rem',
+              borderRadius: '10px',
+              border: '1px solid var(--border)'
+            }}>
+              <div style={{
+                fontSize: '0.75rem',
+                color: 'var(--text-muted)',
+                marginBottom: '0.35rem'
+              }}>
+                Assessment Type
+              </div>
+
+              <div style={{
+                fontWeight: 700,
+                color: 'var(--text)'
+              }}>
+                Career-Specific AI
+              </div>
+            </div>
+
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: '1px solid #334155', paddingTop: '1.5rem' }}>
-            <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
-              Total Questions: <strong>35</strong> | Server-Side Evaluated
+          <div style={{
+            backgroundColor: 'var(--surface-soft)',
+            padding: '1.25rem',
+            borderRadius: '10px',
+            border: '1px solid var(--border)',
+            marginBottom: '2rem'
+          }}>
+            <div style={{
+              fontWeight: 700,
+              color: 'var(--text)',
+              marginBottom: '0.5rem'
+            }}>
+              What SkillForge AI will evaluate
             </div>
-            <button onClick={handleStartTest} disabled={loading} className="btn btn-primary" style={{ padding: '0.75rem 1.75rem', fontSize: '1rem' }}>
-              {loading ? 'Initializing Assessment...' : 'Start Assessment Now'}
-            </button>
+
+            <div style={{
+              color: 'var(--text-secondary)',
+              lineHeight: '1.6',
+              fontSize: '0.9rem'
+            }}>
+              Career-specific skills are selected from your target profession.
+              Missing questions are generated and validated by AI before
+              the assessment begins.
+            </div>
           </div>
+
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            borderTop: '1px solid var(--border)',
+            paddingTop: '1.5rem',
+            gap: '1rem',
+            flexWrap: 'wrap'
+          }}>
+
+            <div style={{
+              fontSize: '0.875rem',
+              color: 'var(--text-secondary)'
+            }}>
+              <strong style={{ color: 'var(--text)' }}>
+                AI-powered career assessment
+              </strong>
+              <br />
+              Questions are prepared specifically for your selected career.
+            </div>
+
+            <button
+              onClick={handleStartTest}
+              disabled={loading}
+              className="btn btn-primary"
+              style={{
+                padding: '0.75rem 1.75rem',
+                fontSize: '1rem'
+              }}
+            >
+              {loading
+                ? 'Preparing Assessment...'
+                : 'Start Assessment Now'}
+            </button>
+
+          </div>
+
         </div>
       )}
 
@@ -449,10 +581,9 @@ export function Assessment() {
             ) : (
               <button
                 onClick={() => setShowConfirmModal(true)}
-                className="btn"
-                style={{ backgroundColor: 'var(--status-success)', color: '#fff', fontWeight: 600 }}
+                className="btn sf-submit-assessment"
               >
-                Submit Assessment
+                Submit Assessment ?
               </button>
             )}
           </div>
@@ -574,7 +705,7 @@ export function Assessment() {
           {planLoading && (
             <div className="card" style={{ padding: '2.5rem', textAlign: 'center' }}>
               <div style={{ fontSize: '1.25rem', fontWeight: 600, color: '#38bdf8', marginBottom: '0.5rem' }}>
-                SkillForge AI is crafting your personalized study plan...
+                
               </div>
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
                 Building a 4-week placement preparation plan focused on your weakest skills.
@@ -713,7 +844,7 @@ export function Assessment() {
               </div>
 
               {/* Create Study Plan Button */}
-              <div style={{ borderTop: '1px solid #334155', marginTop: '1.75rem', paddingTop: '1.5rem', textAlign: 'center' }}>
+              <div style={{ display: 'none',  borderTop: '1px solid #334155', marginTop: '1.75rem', paddingTop: '1.5rem', textAlign: 'center' }}>
                 <button
                   onClick={handleGenerateStudyPlan}
                   disabled={planLoading}
@@ -730,7 +861,7 @@ export function Assessment() {
           )}
 
           {/* STUDY PLAN SECTION */}
-          {studyPlan && (
+          {false && (
             <div className="card" style={{ padding: '2rem', border: '1px solid #38bdf8' }}>
               <div style={{ borderBottom: '1px solid #334155', paddingBottom: '1.25rem', marginBottom: '1.5rem' }}>
                 <span className="badge" style={{ backgroundColor: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: '1px solid #38bdf8', marginBottom: '0.5rem' }}>

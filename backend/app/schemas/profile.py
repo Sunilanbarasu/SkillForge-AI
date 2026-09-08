@@ -2,7 +2,31 @@ from pydantic import BaseModel, Field, field_validator
 from typing import List, Optional
 from datetime import datetime
 
-ALLOWED_SKILLS = ["Python", "C", "DSA", "SQL", "OOP", "DBMS", "Aptitude"]
+ALLOWED_SKILLS = [
+    "Python",
+    "C",
+    "DSA",
+    "SQL",
+    "OOP",
+    "DBMS",
+    "Aptitude",
+    "JavaScript",
+    "React",
+    "APIs",
+    "HTML/CSS",
+    "Web",
+    "Git",
+    "Statistics",
+    "Data Visualization",
+    "Excel",
+    "Machine Learning",
+    "Linux",
+    "Cloud",
+    "CI/CD",
+    "Networking",
+    "Security",
+    "Cybersecurity",
+]
 
 
 class ProfileCreateOrUpdate(BaseModel):
